@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
-import { FiPackage, FiShoppingBag, FiUsers, FiDollarSign, FiTrendingUp, FiCpu } from 'react-icons/fi';
+import { FiPackage, FiShoppingBag, FiUsers, FiDollarSign, FiTrendingUp, FiCpu, FiPlus, FiSettings, FiEye, FiUserCheck, FiFileText, FiMail } from 'react-icons/fi';
 import { AuthContext } from '../../context/AuthContext';
 
 const Dashboard = () => {
@@ -124,55 +124,173 @@ const Dashboard = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="luxury-card p-8 rounded-xl"
+          className="luxury-card p-8 rounded-xl relative overflow-hidden"
         >
-          <h2 className="text-2xl font-bold text-white mb-6">Quick Actions</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            <Link to="/admin/products/add">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full py-3 gold-glow-btn text-black font-semibold rounded-lg"
+          {/* Animated Background Effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary-500/5 via-purple-500/5 to-pink-500/5 animate-pulse"></div>
+          
+          <div className="relative z-10">
+            <motion.h2 
+              className="text-3xl font-bold text-white mb-8 flex items-center gap-3"
+              initial={{ x: -20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.7 }}
+            >
+              <motion.span
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="text-primary-500"
               >
-                Add New Product
-              </motion.button>
-            </Link>
-            <Link to="/admin/products">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full py-3 border-2 border-primary-500 text-white font-semibold rounded-lg hover:bg-primary-500 hover:text-black transition-all"
-              >
-                Manage Products
-              </motion.button>
-            </Link>
-            <Link to="/admin/orders">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full py-3 border-2 border-primary-500 text-white font-semibold rounded-lg hover:bg-primary-500 hover:text-black transition-all"
-              >
-                View Orders
-              </motion.button>
-            </Link>
-            <Link to="/admin/users">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full py-3 border-2 border-primary-500 text-white font-semibold rounded-lg hover:bg-primary-500 hover:text-black transition-all"
-              >
-                Manage Users
-              </motion.button>
-            </Link>
-            <Link to="/admin/designs">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full py-3 border-2 border-primary-500 text-white font-semibold rounded-lg hover:bg-primary-500 hover:text-black transition-all"
-              >
-                Review Designs
-              </motion.button>
-            </Link>
+                ⚡
+              </motion.span>
+              Quick Actions
+            </motion.h2>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+              {/* Add New Product */}
+              <Link to="/admin/products/add">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8 }}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="relative group"
+                >
+                  <div className="absolute inset-0 bg-slate-700 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <div className="relative bg-slate-800 p-6 rounded-xl text-center shadow-2xl border border-slate-600">
+                    <motion.div
+                      animate={{ rotate: [0, 360] }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                      className="mb-3"
+                    >
+                      <FiPlus className="text-4xl mx-auto text-slate-300" />
+                    </motion.div>
+                    <p className="text-slate-200 font-bold text-sm">Add New Product</p>
+                  </div>
+                </motion.div>
+              </Link>
+
+              {/* Manage Products */}
+              <Link to="/admin/products">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.85 }}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="relative group"
+                >
+                  <div className="absolute inset-0 bg-slate-700 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <div className="relative bg-slate-800 p-6 rounded-xl text-center shadow-2xl border border-slate-600">
+                    <motion.div
+                      animate={{ scale: [1, 1.1, 1] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                      className="mb-3"
+                    >
+                      <FiSettings className="text-4xl mx-auto text-slate-300" />
+                    </motion.div>
+                    <p className="text-slate-200 font-bold text-sm">Manage Products</p>
+                  </div>
+                </motion.div>
+              </Link>
+
+              {/* View Orders */}
+              <Link to="/admin/orders">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.9 }}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="relative group"
+                >
+                  <div className="absolute inset-0 bg-slate-700 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <div className="relative bg-slate-800 p-6 rounded-xl text-center shadow-2xl border border-slate-600">
+                    <motion.div
+                      animate={{ y: [0, -5, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                      className="mb-3"
+                    >
+                      <FiEye className="text-4xl mx-auto text-slate-300" />
+                    </motion.div>
+                    <p className="text-slate-200 font-bold text-sm">View Orders</p>
+                  </div>
+                </motion.div>
+              </Link>
+
+              {/* Manage Users */}
+              <Link to="/admin/users">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.95 }}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="relative group"
+                >
+                  <div className="absolute inset-0 bg-slate-700 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <div className="relative bg-slate-800 p-6 rounded-xl text-center shadow-2xl border border-slate-600">
+                    <motion.div
+                      animate={{ rotate: [0, 10, -10, 0] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                      className="mb-3"
+                    >
+                      <FiUserCheck className="text-4xl mx-auto text-slate-300" />
+                    </motion.div>
+                    <p className="text-slate-200 font-bold text-sm">Manage Users</p>
+                  </div>
+                </motion.div>
+              </Link>
+
+              {/* Review Designs */}
+              <Link to="/admin/designs">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1 }}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="relative group"
+                >
+                  <div className="absolute inset-0 bg-slate-700 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <div className="relative bg-slate-800 p-6 rounded-xl text-center shadow-2xl border border-slate-600">
+                    <motion.div
+                      animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
+                      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                      className="mb-3"
+                    >
+                      <FiFileText className="text-4xl mx-auto text-slate-300" />
+                    </motion.div>
+                    <p className="text-slate-200 font-bold text-sm">Review Designs</p>
+                  </div>
+                </motion.div>
+              </Link>
+
+              {/* Contact Messages */}
+              <Link to="/admin/contact-messages">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.05 }}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="relative group"
+                >
+                  <div className="absolute inset-0 bg-slate-700 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <div className="relative bg-slate-800 p-6 rounded-xl text-center shadow-2xl border border-slate-600">
+                    <motion.div
+                      animate={{ scale: [1, 1.1, 1] }}
+                      transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                      className="mb-3"
+                    >
+                      <FiMail className="text-4xl mx-auto text-slate-300" />
+                    </motion.div>
+                    <p className="text-slate-200 font-bold text-sm">Contact Messages</p>
+                  </div>
+                </motion.div>
+              </Link>
+            </div>
           </div>
         </motion.div>
       </div>

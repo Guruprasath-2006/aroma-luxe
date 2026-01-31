@@ -172,7 +172,42 @@ exports.getProduct = async (req, res) => {
 // @access  Private/Admin
 exports.createProduct = async (req, res) => {
   try {
+    console.log('Creating product with data:', req.body);
+    
+    // Validation
+    const { title, brand, price, category, description, images, stock } = req.body;
+    
+    if (!title || !brand || !price || !category || !description) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide all required fields: title, brand, price, category, description'
+      });
+    }
+
+    if (!images || images.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide at least one product image'
+      });
+    }
+
+    if (price <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Price must be greater than 0'
+      });
+    }
+
+    if (stock < 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Stock cannot be negative'
+      });
+    }
+
     const product = await Product.create(req.body);
+
+    console.log('Product created successfully:', product._id);
 
     res.status(201).json({
       success: true,
@@ -180,9 +215,20 @@ exports.createProduct = async (req, res) => {
       product
     });
   } catch (error) {
+    console.error('Error creating product:', error);
+    
+    // Handle Mongoose validation errors
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({
+        success: false,
+        message: messages.join(', ')
+      });
+    }
+
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to create product'
     });
   }
 };

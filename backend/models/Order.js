@@ -59,6 +59,11 @@ const orderSchema = new mongoose.Schema({
     required: true,
     min: [0, 'Total amount cannot be negative']
   },
+  actualRevenue: {
+    type: Number,
+    default: null,
+    min: [0, 'Actual revenue cannot be negative']
+  },
   status: {
     type: String,
     enum: ['Pending', 'Processing', 'Packed', 'Shipped', 'Out for Delivery', 'Delivered', 'Cancelled', 'Refunded'],

@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { FiSearch, FiFilter, FiStar, FiShoppingCart, FiX } from 'react-icons/fi';
+import { FiSearch, FiFilter, FiStar, FiShoppingCart, FiX, FiZap } from 'react-icons/fi';
 import { CartContext } from '../context/CartContext';
 
 const Shop = () => {
@@ -13,6 +13,7 @@ const Shop = () => {
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const { addToCart } = useContext(CartContext);
+  const navigate = useNavigate();
 
   // Filter states
   const [searchTerm, setSearchTerm] = useState('');
@@ -33,7 +34,7 @@ const Shop = () => {
 
   const fetchProducts = async () => {
     try {
-      const { data } = await axios.get('/api/products');
+      const { data } = await axios.get('/api/products?limit=100');
       setProducts(data.products);
       setFilteredProducts(data.products);
       setLoading(false);
@@ -96,6 +97,12 @@ const Shop = () => {
   const handleAddToCart = (product) => {
     addToCart(product);
     toast.success(`${product.title} added to cart!`);
+  };
+
+  const handleBuyNow = (product) => {
+    addToCart(product);
+    toast.success(`${product.title} added to cart!`);
+    navigate('/checkout');
   };
 
   return (
@@ -274,7 +281,7 @@ const Shop = () => {
                         Quick View
                       </button>
                       <div className="absolute top-4 right-4 bg-primary-500 text-black px-3 py-1 rounded-full text-sm font-bold">
-                        ₹{product.price}
+                        Est. ₹{product.price}
                       </div>
                     </div>
                     <div className="p-6">
@@ -291,13 +298,22 @@ const Shop = () => {
                         </div>
                         <span className="text-gray-400 text-sm">{product.size}</span>
                       </div>
-                      <button
-                        onClick={() => handleAddToCart(product)}
-                        className="w-full py-2 gold-glow-btn text-black font-semibold rounded-lg flex items-center justify-center space-x-2"
-                      >
-                        <FiShoppingCart />
-                        <span>Add to Cart</span>
-                      </button>
+                      <div className="space-y-2">
+                        <button
+                          onClick={() => handleBuyNow(product)}
+                          className="w-full py-2.5 gold-glow-btn text-black font-semibold rounded-lg flex items-center justify-center space-x-2 hover:scale-105 transition-transform"
+                        >
+                          <FiZap />
+                          <span>Buy Now</span>
+                        </button>
+                        <button
+                          onClick={() => handleAddToCart(product)}
+                          className="w-full py-2.5 border-2 border-primary-500 text-white font-semibold rounded-lg flex items-center justify-center space-x-2 hover:bg-primary-500 hover:text-black transition-all"
+                        >
+                          <FiShoppingCart />
+                          <span>Add to Cart</span>
+                        </button>
+                      </div>
                     </div>
                   </motion.div>
                 ))}
@@ -350,16 +366,26 @@ const Shop = () => {
                     <div className="space-y-3">
                       <button
                         onClick={() => {
+                          handleBuyNow(quickViewProduct);
+                          setQuickViewProduct(null);
+                        }}
+                        className="w-full py-3 gold-glow-btn text-black font-semibold rounded-lg flex items-center justify-center space-x-2 hover:scale-105 transition-transform"
+                      >
+                        <FiZap />
+                        <span>Buy Now</span>
+                      </button>
+                      <button
+                        onClick={() => {
                           handleAddToCart(quickViewProduct);
                           setQuickViewProduct(null);
                         }}
-                        className="w-full py-3 gold-glow-btn text-black font-semibold rounded-lg flex items-center justify-center space-x-2"
+                        className="w-full py-3 border-2 border-primary-500 text-white font-semibold rounded-lg flex items-center justify-center space-x-2 hover:bg-primary-500 hover:text-black transition-all"
                       >
                         <FiShoppingCart />
                         <span>Add to Cart</span>
                       </button>
                       <Link to={`/product/${quickViewProduct._id}`} onClick={() => setQuickViewProduct(null)}>
-                        <button className="w-full py-3 border-2 border-primary-500 text-white font-semibold rounded-lg hover:bg-primary-500 hover:text-black transition-all">
+                        <button className="w-full py-3 border-2 border-gray-600 text-gray-300 font-semibold rounded-lg hover:bg-gray-600 hover:text-white transition-all">
                           View Full Details
                         </button>
                       </Link>

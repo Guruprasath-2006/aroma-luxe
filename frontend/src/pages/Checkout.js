@@ -1,12 +1,14 @@
 
+
+
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
-import { FiCreditCard, FiDollarSign, FiSmartphone } from 'react-icons/fi';
+import { FiCreditCard, FiDollarSign, FiSmartphone, FiPhone, FiCheck } from 'react-icons/fi';
 import { SiGooglepay, SiPhonepe, SiPaytm, SiAmazonpay } from 'react-icons/si';
 
 const Checkout = () => {
@@ -14,19 +16,109 @@ const Checkout = () => {
   const { token } = useContext(AuthContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const [formData, setFormData] = useState({
     fullName: '',
     address: '',
     city: '',
     postalCode: '',
-    country: '',
+    country: 'India',
     phone: '',
     paymentMethod: 'Cash on Delivery'
   });
 
+  const [errors, setErrors] = useState({});
+
+  // Validation functions
+  const validateFullName = (name) => {
+    const nameRegex = /^[a-zA-Z\s.'-]{2,50}$/;
+    if (!name.trim()) return 'Full name is required';
+    if (!nameRegex.test(name)) return 'Full name should only contain letters, spaces, and common punctuation';
+    if (name.trim().length < 2) return 'Full name must be at least 2 characters';
+    return '';
+  };
+
+  const validateAddress = (address) => {
+    if (!address.trim()) return 'Address is required';
+    if (address.trim().length < 10) return 'Address must be at least 10 characters';
+    if (address.trim().length > 200) return 'Address must be less than 200 characters';
+    return '';
+  };
+
+  const validateCity = (city) => {
+    const cityRegex = /^[a-zA-Z\s.'-]{2,50}$/;
+    if (!city.trim()) return 'City is required';
+    if (!cityRegex.test(city)) return 'City should only contain letters and spaces';
+    return '';
+  };
+
+  const validatePostalCode = (code) => {
+    // Supports various formats: 123456, 12345, 12345-6789, A1A 1A1, etc.
+    const postalRegex = /^[A-Za-z0-9\s-]{3,10}$/;
+    if (!code.trim()) return 'Postal code is required';
+    if (!postalRegex.test(code)) return 'Please enter a valid postal code';
+    return '';
+  };
+
+  const validateCountry = (country) => {
+    // Always set to India
+    return '';
+  };
+
+  const validatePhone = (phone) => {
+    // Remove spaces, dashes, and parentheses for validation
+    const cleanPhone = phone.replace(/[\s\-()]/g, '');
+    const phoneRegex = /^[+]?[\d]{10,15}$/;
+    
+    if (!phone.trim()) return 'Phone number is required';
+    if (!phoneRegex.test(cleanPhone)) return 'Please enter a valid phone number (10-15 digits)';
+    if (cleanPhone.length < 10) return 'Phone number must be at least 10 digits';
+    return '';
+  };
+
+  const validateField = (name, value) => {
+    let error = '';
+    switch (name) {
+      case 'fullName':
+        error = validateFullName(value);
+        break;
+      case 'address':
+        error = validateAddress(value);
+        break;
+      case 'city':
+        error = validateCity(value);
+        break;
+      case 'postalCode':
+        error = validatePostalCode(value);
+        break;
+      case 'country':
+        error = validateCountry(value);
+        break;
+      case 'phone':
+        error = validatePhone(value);
+        break;
+      default:
+        break;
+    }
+    return error;
+  };
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    
+    // Update form data
+    setFormData({ ...formData, [name]: value });
+    
+    // Real-time validation
+    const error = validateField(name, value);
+    setErrors({ ...errors, [name]: error });
+  };
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    const error = validateField(name, value);
+    setErrors({ ...errors, [name]: error });
   };
 
   // Load Razorpay script dynamically
@@ -60,7 +152,7 @@ const Checkout = () => {
       const scriptLoaded = await loadRazorpayScript();
       
       if (!scriptLoaded) {
-        toast.error('Failed to load payment gateway. Please check your internet connection.');
+        toast.error('Failed to load payment gateway. Please try again or use Cash on Delivery.');
         setLoading(false);
         return;
       }
@@ -85,24 +177,39 @@ const Checkout = () => {
         throw new Error(data.message || 'Failed to create order');
       }
 
-      // Check if demo mode (Razorpay not configured)
+      // Check if demo mode (Razorpay not configured) OR if user wants to proceed anyway
       if (data.isDemo) {
         console.log('⚠️ Demo mode detected - creating order directly');
-        toast.info('Demo payment mode - Order will be created as "pending payment"');
+        
+        // Ask user if they want to proceed with demo payment
+        const proceedWithDemo = window.confirm(
+          '⚠️ Payment Gateway Demo Mode\n\n' +
+          'The payment gateway is not fully configured. ' +
+          'Your order will be created with "Pending Payment" status.\n\n' +
+          'Would you like to proceed?'
+        );
+
+        if (!proceedWithDemo) {
+          setLoading(false);
+          toast.info('Order cancelled. Please try Cash on Delivery option.');
+          return;
+        }
         
         // Create order directly without Razorpay modal
         const demoOrderData = {
           ...orderData,
           paymentStatus: 'pending',
-          paymentId: data.razorpayOrderId
+          paymentId: data.razorpayOrderId || `demo_${Date.now()}`
         };
 
         const orderResponse = await axios.post('/api/orders', demoOrderData, config);
         
         if (orderResponse.data.success) {
-          toast.success('Order placed successfully! (Demo Mode)');
+          toast.success('Order placed successfully! Payment is pending.');
           clearCart();
           navigate('/orders');
+        } else {
+          throw new Error('Failed to create order');
         }
         setLoading(false);
         return;
@@ -180,6 +287,54 @@ const Checkout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Check if user has phone number registered
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+      const { data } = await axios.get('/api/auth/profile', config);
+      
+      if (!data.user.phone) {
+        toast.error('Please add a phone number to your profile before placing orders. Go to Profile > Edit Profile to add your phone number.');
+        setTimeout(() => navigate('/profile'), 2000);
+        return;
+      }
+    } catch (error) {
+      console.error('Error checking user phone:', error);
+    }
+    
+    // Validate all fields
+    const newErrors = {
+      fullName: validateFullName(formData.fullName),
+      address: validateAddress(formData.address),
+      city: validateCity(formData.city),
+      postalCode: validatePostalCode(formData.postalCode),
+      phone: validatePhone(formData.phone)
+    };
+
+    setErrors(newErrors);
+
+    // Check if any errors exist
+    const hasErrors = Object.values(newErrors).some(error => error !== '');
+    
+    if (hasErrors) {
+      toast.error('Please correct the errors in the form');
+      // Scroll to first error
+      const firstErrorField = Object.keys(newErrors).find(key => newErrors[key] !== '');
+      document.getElementsByName(firstErrorField)[0]?.focus();
+      return;
+    }
+
+    // Additional validation
+    if (!formData.fullName || !formData.address || !formData.city || 
+        !formData.postalCode || !formData.phone) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -190,7 +345,7 @@ const Checkout = () => {
           brand: item.brand,
           price: item.price,
           size: item.size,
-          quantity: item.quantity,
+          quantity: item.quantity || 1,
           image: item.images[0]
         })),
         shippingAddress: {
@@ -208,39 +363,32 @@ const Checkout = () => {
       console.log('Order Data:', orderData);
       console.log('Payment Method:', formData.paymentMethod);
 
-      // Check if payment method is online (not COD)
-      const onlinePaymentMethods = ['PhonePe', 'Google Pay', 'Paytm', 'Amazon Pay', 'Credit/Debit Card', 'Net Banking'];
-      
-      if (onlinePaymentMethods.includes(formData.paymentMethod)) {
-        console.log('Processing online payment...');
-        // Process online payment through Razorpay
-        await handleRazorpayPayment(orderData);
-      } else {
-        console.log('Processing COD order...');
-        // Cash on Delivery - direct order creation
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        };
-
-        const response = await axios.post('/api/orders', orderData, config);
-        
-        console.log('COD Order Response:', response.data);
-
-        if (response.data.success) {
-          toast.success('Order placed successfully! Pay on delivery.');
-          clearCart();
-          navigate('/orders');
-        } else {
-          throw new Error(response.data.message || 'Failed to create order');
+      // Process Cash on Delivery order
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
-        setLoading(false);
+      };
+
+      const response = await axios.post('/api/orders', orderData, config);
+      
+      console.log('Order Response:', response.data);
+
+      if (response.data.success) {
+        setShowSuccessModal(true);
+        clearCart();
+        setTimeout(() => {
+          setShowSuccessModal(false);
+          navigate('/orders');
+        }, 4000);
+      } else {
+        throw new Error(response.data.message || 'Failed to create order');
       }
+      setLoading(false);
     } catch (error) {
       console.error('Error placing order:', error);
-      const errorMessage = error.response?.data?.message || error.message || 'Failed to place order';
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to place order. Please try again.';
       toast.error(errorMessage);
       setLoading(false);
     }
@@ -286,9 +434,17 @@ const Checkout = () => {
                       required
                       value={formData.fullName}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-luxury-black text-white border border-gold-600/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500"
+                      onBlur={handleBlur}
+                      pattern="[A-Za-z\s.'-]{2,50}"
+                      title="Full name should only contain letters, spaces, and common punctuation"
+                      className={`w-full px-4 py-3 bg-luxury-black text-white border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
+                        errors.fullName ? 'border-red-500 focus:ring-red-500' : 'border-gold-600/30 focus:ring-gold-500'
+                      }`}
                       placeholder="Enter your full name"
                     />
+                    {errors.fullName && (
+                      <p className="mt-1 text-sm text-red-400">{errors.fullName}</p>
+                    )}
                   </div>
 
                   <div>
@@ -299,9 +455,17 @@ const Checkout = () => {
                       required
                       value={formData.address}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-luxury-black text-white border border-gold-600/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500"
-                      placeholder="Street address"
+                      onBlur={handleBlur}
+                      minLength="10"
+                      maxLength="200"
+                      className={`w-full px-4 py-3 bg-luxury-black text-white border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
+                        errors.address ? 'border-red-500 focus:ring-red-500' : 'border-gold-600/30 focus:ring-gold-500'
+                      }`}
+                      placeholder="Street address, building, apartment number"
                     />
+                    {errors.address && (
+                      <p className="mt-1 text-sm text-red-400">{errors.address}</p>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -313,9 +477,17 @@ const Checkout = () => {
                         required
                         value={formData.city}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 bg-luxury-black text-white border border-gold-600/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500"
+                        onBlur={handleBlur}
+                        pattern="[A-Za-z\s.'-]{2,50}"
+                        title="City should only contain letters and spaces"
+                        className={`w-full px-4 py-3 bg-luxury-black text-white border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
+                          errors.city ? 'border-red-500 focus:ring-red-500' : 'border-gold-600/30 focus:ring-gold-500'
+                        }`}
                         placeholder="City"
                       />
+                      {errors.city && (
+                        <p className="mt-1 text-sm text-red-400">{errors.city}</p>
+                      )}
                     </div>
 
                     <div>
@@ -326,23 +498,26 @@ const Checkout = () => {
                         required
                         value={formData.postalCode}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 bg-luxury-black text-white border border-gold-600/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500"
+                        onBlur={handleBlur}
+                        pattern="[A-Za-z0-9\s-]{3,10}"
+                        title="Please enter a valid postal code"
+                        className={`w-full px-4 py-3 bg-luxury-black text-white border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
+                          errors.postalCode ? 'border-red-500 focus:ring-red-500' : 'border-gold-600/30 focus:ring-gold-500'
+                        }`}
                         placeholder="Postal code"
                       />
+                      {errors.postalCode && (
+                        <p className="mt-1 text-sm text-red-400">{errors.postalCode}</p>
+                      )}
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-gray-300 mb-2">Country *</label>
-                    <input
-                      type="text"
-                      name="country"
-                      required
-                      value={formData.country}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 bg-luxury-black text-white border border-gold-600/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500"
-                      placeholder="Country"
-                    />
+                    <label className="block text-gray-300 mb-2">Country</label>
+                    <div className="w-full px-4 py-3 bg-luxury-lightGray/30 text-white border border-gold-600/30 rounded-lg flex items-center justify-between">
+                      <span className="text-white font-medium">🇮🇳 India</span>
+                      <span className="text-xs text-gray-400">(Fixed)</span>
+                    </div>
                   </div>
 
                   <div>
@@ -353,148 +528,25 @@ const Checkout = () => {
                       required
                       value={formData.phone}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-luxury-black text-white border border-gold-600/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500"
-                      placeholder="Phone number"
+                      onBlur={handleBlur}
+                      pattern="[+]?[\d\s\-()]{10,15}"
+                      title="Please enter a valid phone number (10-15 digits)"
+                      className={`w-full px-4 py-3 bg-luxury-black text-white border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
+                        errors.phone ? 'border-red-500 focus:ring-red-500' : 'border-gold-600/30 focus:ring-gold-500'
+                      }`}
+                      placeholder="Phone number (e.g., +91 1234567890)"
                     />
+                    {errors.phone && (
+                      <p className="mt-1 text-sm text-red-400">{errors.phone}</p>
+                    )}
                   </div>
 
                   <div>
                     <label className="block text-gray-300 mb-3 text-lg font-semibold">Payment Method *</label>
                     
-                    <div className="space-y-3">
-                      {/* UPI Payment Options */}
+                    <div className="space-y-4">
+                      {/* Cash on Delivery Only */}
                       <div className="space-y-2">
-                        <p className="text-sm text-gray-400 font-medium mb-2">UPI Payments</p>
-                        
-                        <label className={`flex items-center gap-4 p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                          formData.paymentMethod === 'PhonePe' 
-                            ? 'border-primary-500 bg-primary-500/10' 
-                            : 'border-gold-600/30 hover:border-primary-500/50'
-                        }`}>
-                          <input
-                            type="radio"
-                            name="paymentMethod"
-                            value="PhonePe"
-                            checked={formData.paymentMethod === 'PhonePe'}
-                            onChange={handleChange}
-                            className="w-5 h-5 text-primary-500"
-                          />
-                          <SiPhonepe className="text-3xl text-purple-600" />
-                          <div className="flex-1">
-                            <p className="text-white font-semibold">PhonePe</p>
-                            <p className="text-xs text-gray-400">Pay using PhonePe UPI</p>
-                          </div>
-                        </label>
-
-                        <label className={`flex items-center gap-4 p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                          formData.paymentMethod === 'Google Pay' 
-                            ? 'border-primary-500 bg-primary-500/10' 
-                            : 'border-gold-600/30 hover:border-primary-500/50'
-                        }`}>
-                          <input
-                            type="radio"
-                            name="paymentMethod"
-                            value="Google Pay"
-                            checked={formData.paymentMethod === 'Google Pay'}
-                            onChange={handleChange}
-                            className="w-5 h-5 text-primary-500"
-                          />
-                          <SiGooglepay className="text-3xl text-blue-600" />
-                          <div className="flex-1">
-                            <p className="text-white font-semibold">Google Pay</p>
-                            <p className="text-xs text-gray-400">Pay using Google Pay UPI</p>
-                          </div>
-                        </label>
-
-                        <label className={`flex items-center gap-4 p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                          formData.paymentMethod === 'Paytm' 
-                            ? 'border-primary-500 bg-primary-500/10' 
-                            : 'border-gold-600/30 hover:border-primary-500/50'
-                        }`}>
-                          <input
-                            type="radio"
-                            name="paymentMethod"
-                            value="Paytm"
-                            checked={formData.paymentMethod === 'Paytm'}
-                            onChange={handleChange}
-                            className="w-5 h-5 text-primary-500"
-                          />
-                          <SiPaytm className="text-3xl text-blue-500" />
-                          <div className="flex-1">
-                            <p className="text-white font-semibold">Paytm</p>
-                            <p className="text-xs text-gray-400">Pay using Paytm Wallet/UPI</p>
-                          </div>
-                        </label>
-
-                        <label className={`flex items-center gap-4 p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                          formData.paymentMethod === 'Amazon Pay' 
-                            ? 'border-primary-500 bg-primary-500/10' 
-                            : 'border-gold-600/30 hover:border-primary-500/50'
-                        }`}>
-                          <input
-                            type="radio"
-                            name="paymentMethod"
-                            value="Amazon Pay"
-                            checked={formData.paymentMethod === 'Amazon Pay'}
-                            onChange={handleChange}
-                            className="w-5 h-5 text-primary-500"
-                          />
-                          <SiAmazonpay className="text-3xl text-orange-500" />
-                          <div className="flex-1">
-                            <p className="text-white font-semibold">Amazon Pay</p>
-                            <p className="text-xs text-gray-400">Pay using Amazon Pay balance</p>
-                          </div>
-                        </label>
-                      </div>
-
-                      {/* Wallet & Card Options */}
-                      <div className="space-y-2 pt-3 border-t border-gold-600/20">
-                        <p className="text-sm text-gray-400 font-medium mb-2">Cards & Wallets</p>
-                        
-                        <label className={`flex items-center gap-4 p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                          formData.paymentMethod === 'Credit/Debit Card' 
-                            ? 'border-primary-500 bg-primary-500/10' 
-                            : 'border-gold-600/30 hover:border-primary-500/50'
-                        }`}>
-                          <input
-                            type="radio"
-                            name="paymentMethod"
-                            value="Credit/Debit Card"
-                            checked={formData.paymentMethod === 'Credit/Debit Card'}
-                            onChange={handleChange}
-                            className="w-5 h-5 text-primary-500"
-                          />
-                          <FiCreditCard className="text-3xl text-gray-300" />
-                          <div className="flex-1">
-                            <p className="text-white font-semibold">Credit/Debit Card</p>
-                            <p className="text-xs text-gray-400">Visa, Mastercard, Rupay</p>
-                          </div>
-                        </label>
-
-                        <label className={`flex items-center gap-4 p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                          formData.paymentMethod === 'Net Banking' 
-                            ? 'border-primary-500 bg-primary-500/10' 
-                            : 'border-gold-600/30 hover:border-primary-500/50'
-                        }`}>
-                          <input
-                            type="radio"
-                            name="paymentMethod"
-                            value="Net Banking"
-                            checked={formData.paymentMethod === 'Net Banking'}
-                            onChange={handleChange}
-                            className="w-5 h-5 text-primary-500"
-                          />
-                          <FiSmartphone className="text-3xl text-gray-300" />
-                          <div className="flex-1">
-                            <p className="text-white font-semibold">Net Banking</p>
-                            <p className="text-xs text-gray-400">All major banks supported</p>
-                          </div>
-                        </label>
-                      </div>
-
-                      {/* Cash on Delivery */}
-                      <div className="space-y-2 pt-3 border-t border-gold-600/20">
-                        <p className="text-sm text-gray-400 font-medium mb-2">Cash Payment</p>
                         
                         <label className={`flex items-center gap-4 p-4 border-2 rounded-lg cursor-pointer transition-all ${
                           formData.paymentMethod === 'Cash on Delivery' 
@@ -512,9 +564,16 @@ const Checkout = () => {
                           <FiDollarSign className="text-3xl text-green-500" />
                           <div className="flex-1">
                             <p className="text-white font-semibold">Cash on Delivery</p>
-                            <p className="text-xs text-gray-400">Pay when you receive</p>
+                            <p className="text-xs text-gray-400">Pay with cash when your order is delivered</p>
                           </div>
                         </label>
+                        
+                        {/* Professional Agent Callback Notice */}
+                        <div className="mt-4 p-4 bg-primary-500/10 border border-primary-500/30 rounded-lg">
+                          <p className="text-sm text-gray-300">
+                            <span className="text-primary-400 font-semibold">📞 Order Confirmation:</span> Our customer service agent will call you within a few minutes to confirm your order details and delivery schedule.
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -554,7 +613,7 @@ const Checkout = () => {
                 <div className="space-y-3 border-t border-gold-600/20 pt-4 mb-6">
                   <div className="flex justify-between text-gray-300">
                     <span>Subtotal</span>
-                    <span>${getCartTotal().toFixed(2)}</span>
+                    <span>₹{getCartTotal().toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-gray-300">
                     <span>Shipping</span>
@@ -562,7 +621,7 @@ const Checkout = () => {
                   </div>
                   <div className="flex justify-between text-gray-300">
                     <span>Tax (10%)</span>
-                    <span>${(getCartTotal() * 0.1).toFixed(2)}</span>
+                    <span>₹{(getCartTotal() * 0.1).toFixed(2)}</span>
                   </div>
                   <div className="border-t border-gold-600/20 pt-3">
                     <div className="flex justify-between text-white text-xl font-bold">
@@ -586,6 +645,108 @@ const Checkout = () => {
           </div>
         </form>
       </div>
+
+      {/* Success Modal */}
+      <AnimatePresence>
+        {showSuccessModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.5, opacity: 0, y: 50 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.5, opacity: 0, y: 50 }}
+              transition={{ 
+                type: "spring", 
+                damping: 15, 
+                stiffness: 150,
+                duration: 0.6 
+              }}
+              className="luxury-card rounded-3xl max-w-lg w-full overflow-hidden"
+            >
+              {/* Success Icon with Animation */}
+              <div className="bg-gradient-to-br from-green-500/20 to-primary-500/20 p-8 text-center">
+                <motion.div
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ 
+                    delay: 0.2,
+                    type: "spring",
+                    damping: 10,
+                    stiffness: 100
+                  }}
+                  className="w-24 h-24 mx-auto bg-green-500 rounded-full flex items-center justify-center mb-4"
+                >
+                  <FiCheck className="text-white text-5xl font-bold" strokeWidth={3} />
+                </motion.div>
+                
+                <motion.h2
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="text-3xl font-bold text-white mb-2"
+                >
+                  Order Placed Successfully! 🎉
+                </motion.h2>
+              </div>
+
+              {/* Agent Call Message */}
+              <div className="p-8 text-center">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.6 }}
+                  className="bg-primary-500/10 border-2 border-primary-500/30 rounded-2xl p-6 mb-4"
+                >
+                  <motion.div
+                    animate={{ 
+                      scale: [1, 1.1, 1],
+                      rotate: [0, 10, -10, 0]
+                    }}
+                    transition={{ 
+                      delay: 0.8,
+                      duration: 0.6,
+                      repeat: Infinity,
+                      repeatDelay: 2
+                    }}
+                    className="inline-block"
+                  >
+                    <FiPhone className="text-primary-500 text-6xl mb-4" />
+                  </motion.div>
+                  
+                  <h3 className="text-2xl font-bold text-primary-400 mb-3">
+                    Our Agent Will Call You
+                  </h3>
+                  <p className="text-gray-300 text-lg leading-relaxed">
+                    One of our customer service representatives will contact you within a few minutes to confirm your order details and discuss the delivery schedule.
+                  </p>
+                </motion.div>
+
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1 }}
+                  className="text-gray-400 text-sm"
+                >
+                  Please keep your phone nearby
+                </motion.p>
+
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1.2 }}
+                  className="mt-6 text-primary-500 text-sm"
+                >
+                  Redirecting to your orders...
+                </motion.div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

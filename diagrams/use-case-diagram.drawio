@@ -1,0 +1,138 @@
+<mxfile host="app.diagrams.net" modified="2026-01-24T00:00:00.000Z" agent="5.0" version="22.1.11">
+  <diagram name="Use Case Diagram" id="use-case-diagram">
+    <mxGraphModel dx="1434" dy="844" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- System Boundary Box -->
+        <mxCell id="system" value="SYSTEM" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#D4E9FF;strokeColor=#000000;verticalAlign=top;fontSize=16;fontStyle=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="200" y="50" width="450" height="1000" as="geometry" />
+        </mxCell>
+
+        <!-- Customer Actor (Left) -->
+        <mxCell id="user" value="Customer" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="80" y="450" width="50" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Admin Actor (Right) -->
+        <mxCell id="admin" value="Admin" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="720" y="450" width="50" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Use Cases (Vertically stacked in center) -->
+        <mxCell id="uc1" value="Login" style="ellipse;whiteSpace=wrap;html=1;fillColor=#CCE5FF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="325" y="100" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc2" value="Register Account" style="ellipse;whiteSpace=wrap;html=1;fillColor=#CCE5FF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="325" y="170" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc3" value="Browse Products" style="ellipse;whiteSpace=wrap;html=1;fillColor=#CCE5FF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="325" y="240" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc4" value="Manage Shopping Cart" style="ellipse;whiteSpace=wrap;html=1;fillColor=#CCE5FF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="325" y="310" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc5" value="Place Order" style="ellipse;whiteSpace=wrap;html=1;fillColor=#CCE5FF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="325" y="380" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc6" value="View Order History" style="ellipse;whiteSpace=wrap;html=1;fillColor=#CCE5FF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="325" y="450" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc7" value="Manage Profile" style="ellipse;whiteSpace=wrap;html=1;fillColor=#CCE5FF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="325" y="520" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc8" value="Write Reviews" style="ellipse;whiteSpace=wrap;html=1;fillColor=#CCE5FF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="325" y="590" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc9" value="Use Design Studio" style="ellipse;whiteSpace=wrap;html=1;fillColor=#CCE5FF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="325" y="660" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc10" value="Manage Products" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFE6E6;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="325" y="730" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc11" value="Manage Orders" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFE6E6;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="325" y="800" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc12" value="Manage Users" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFE6E6;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="325" y="870" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc13" value="View Dashboard" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFE6E6;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="325" y="940" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc14" value="Logout" style="ellipse;whiteSpace=wrap;html=1;fillColor=#CCE5FF;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="325" y="1010" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Customer to Use Case Lines -->
+        <mxCell id="edge1" edge="1" parent="1" source="user" target="uc1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge2" edge="1" parent="1" source="user" target="uc2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge3" edge="1" parent="1" source="user" target="uc3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge4" edge="1" parent="1" source="user" target="uc4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge5" edge="1" parent="1" source="user" target="uc5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge6" edge="1" parent="1" source="user" target="uc6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge7" edge="1" parent="1" source="user" target="uc7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge8" edge="1" parent="1" source="user" target="uc8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge9" edge="1" parent="1" source="user" target="uc9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge14" edge="1" parent="1" source="user" target="uc14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Admin to Use Case Lines -->
+        <mxCell id="edge15" edge="1" parent="1" source="admin" target="uc1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge16" edge="1" parent="1" source="admin" target="uc10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge17" edge="1" parent="1" source="admin" target="uc11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge18" edge="1" parent="1" source="admin" target="uc12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge19" edge="1" parent="1" source="admin" target="uc13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge20" edge="1" parent="1" source="admin" target="uc7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge21" edge="1" parent="1" source="admin" target="uc14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

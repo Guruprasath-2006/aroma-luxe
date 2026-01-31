@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Order = require('../models/Order');
 
 // @desc    Get all users (Admin)
 // @route   GET /api/users
@@ -7,10 +8,25 @@ exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select('-password').sort({ createdAt: -1 });
 
+    // Calculate order statistics for each user
+    const usersWithStats = await Promise.all(
+      users.map(async (user) => {
+        const userOrders = await Order.find({ user: user._id });
+        const orderCount = userOrders.length;
+        const totalSpent = userOrders.reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+
+        return {
+          ...user.toObject(),
+          orderCount,
+          totalSpent
+        };
+      })
+    );
+
     res.status(200).json({
       success: true,
-      count: users.length,
-      users
+      count: usersWithStats.length,
+      users: usersWithStats
     });
   } catch (error) {
     res.status(500).json({
@@ -34,9 +50,20 @@ exports.getUser = async (req, res) => {
       });
     }
 
+    // Calculate order statistics for the user
+    const userOrders = await Order.find({ user: user._id });
+    const orderCount = userOrders.length;
+    const totalSpent = userOrders.reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+
+    const userWithStats = {
+      ...user.toObject(),
+      orderCount,
+      totalSpent
+    };
+
     res.status(200).json({
       success: true,
-      user
+      user: userWithStats
     });
   } catch (error) {
     res.status(500).json({

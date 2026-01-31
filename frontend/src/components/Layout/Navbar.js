@@ -71,7 +71,10 @@ const Navbar = () => {
             {/* User Menu */}
             {user ? (
               <div className="flex items-center space-x-4">
-                <span className="text-white text-sm">Hi, {user.name}</span>
+                <Link to="/profile" className="text-white hover:text-primary-500 transition-colors flex items-center space-x-1">
+                  <FiUser />
+                  <span className="text-sm">{user.name}</span>
+                </Link>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -133,9 +136,14 @@ const Navbar = () => {
                 Design Studio
               </Link>
               {user && (
-                <Link to="/orders" className="text-white hover:text-primary-500" onClick={() => setIsOpen(false)}>
-                  Orders
-                </Link>
+                <>
+                  <Link to="/orders" className="text-white hover:text-primary-500" onClick={() => setIsOpen(false)}>
+                    Orders
+                  </Link>
+                  <Link to="/profile" className="text-white hover:text-primary-500" onClick={() => setIsOpen(false)}>
+                    My Profile
+                  </Link>
+                </>
               )}
               {isAdmin() && (
                 <Link to="/admin/dashboard" className="text-white hover:text-primary-500" onClick={() => setIsOpen(false)}>
@@ -174,5 +182,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-

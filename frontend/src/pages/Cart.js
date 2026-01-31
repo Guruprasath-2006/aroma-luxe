@@ -150,22 +150,23 @@ const Cart = () => {
 
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between text-gray-300">
-                  <span>Subtotal</span>
-                  <span>${getCartTotal().toFixed(2)}</span>
+                  <span>Subtotal (Estimated)</span>
+                  <span>₹{getCartTotal().toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-gray-300">
                   <span>Shipping</span>
-                  <span className="text-green-400">Free</span>
+                  <span className="text-green-400">TBD</span>
                 </div>
                 <div className="flex justify-between text-gray-300">
                   <span>Tax (Estimated)</span>
-                  <span>${(getCartTotal() * 0.1).toFixed(2)}</span>
+                  <span>₹{(getCartTotal() * 0.1).toFixed(2)}</span>
                 </div>
                 <div className="border-t border-primary-600/20 pt-4">
                   <div className="flex justify-between text-white text-xl font-bold">
-                    <span>Total</span>
-                    <span className="text-primary-500">${(getCartTotal() * 1.1).toFixed(2)}</span>
+                    <span>Estimated Total</span>
+                    <span className="text-primary-500">₹{(getCartTotal() * 1.1).toFixed(2)}</span>
                   </div>
+                  <p className="text-xs text-gray-400 mt-2">*Final cost will be determined after project completion</p>
                 </div>
               </div>
 

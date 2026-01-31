@@ -669,11 +669,6 @@ const Login = () => {
                 ease: "linear"
               }}
             />
-            <p className="text-xs text-primary-400 mb-2 font-semibold flex items-center">
-              <span className="mr-2">🔧</span> Demo System Access:
-            </p>
-            <p className="text-xs text-gray-300">👨‍💼 Admin: admin@aromaluxe.com / admin123</p>
-            <p className="text-xs text-gray-300">👷 User: user@aromaluxe.com / user123</p>
           </motion.div>
         </motion.form>
       </motion.div>

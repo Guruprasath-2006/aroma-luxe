@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { FiStar, FiShoppingCart, FiMinus, FiPlus, FiPackage, FiTruck, FiShield } from 'react-icons/fi';
+import { FiStar, FiShoppingCart, FiMinus, FiPlus, FiPackage, FiTruck, FiShield, FiZap } from 'react-icons/fi';
 import { CartContext } from '../context/CartContext';
 
 const ProductDetails = () => {
@@ -38,6 +38,15 @@ const ProductDetails = () => {
     }
     addToCart(product, quantity);
     toast.success(`${quantity} x ${product.title} added to cart!`);
+  };
+
+  const handleBuyNow = () => {
+    if (product.stock < quantity) {
+      toast.error('Not enough stock available');
+      return;
+    }
+    addToCart(product, quantity);
+    navigate('/checkout');
   };
 
   const decreaseQuantity = () => {
@@ -165,17 +174,30 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            {/* Add to Cart Button */}
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={handleAddToCart}
-              disabled={product.stock === 0}
-              className="w-full py-4 gold-glow-btn text-black font-bold rounded-lg text-lg flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed mb-6"
-            >
-              <FiShoppingCart />
-              <span>Add to Cart</span>
-            </motion.button>
+            {/* Action Buttons */}
+            <div className="space-y-3 mb-6">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleBuyNow}
+                disabled={product.stock === 0}
+                className="w-full py-4 gold-glow-btn text-black font-bold rounded-lg text-lg flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <FiZap />
+                <span>Buy Now</span>
+              </motion.button>
+              
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleAddToCart}
+                disabled={product.stock === 0}
+                className="w-full py-4 border-2 border-primary-500 text-white font-bold rounded-lg text-lg flex items-center justify-center space-x-2 hover:bg-primary-500 hover:text-black transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <FiShoppingCart />
+                <span>Add to Cart</span>
+              </motion.button>
+            </div>
 
             {/* Product Features */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

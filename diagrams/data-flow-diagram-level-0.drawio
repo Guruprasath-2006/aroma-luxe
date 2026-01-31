@@ -1,0 +1,220 @@
+<mxfile host="65bd71144e">
+    <diagram name="DFD Level 0" id="level0-dfd">
+        <mxGraphModel dx="1773" dy="1045" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="customer" value="USER" style="rounded=0;whiteSpace=wrap;html=1;fontSize=30;fontStyle=1;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="250" width="180" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="system" value="VELAN ENGINEERING&#xa;E-COMMERCE&#xa;SYSTEM" style="rounded=0;whiteSpace=wrap;html=1;fontSize=35;fontStyle=1;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;strokeWidth=3;" parent="1" vertex="1">
+                    <mxGeometry x="650" y="150" width="600" height="800" as="geometry"/>
+                </mxCell>
+                <mxCell id="admin" value="ADMIN" style="rounded=0;whiteSpace=wrap;html=1;fontSize=30;fontStyle=1;align=center;verticalAlign=middle;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="1720" y="250" width="180" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="flow1" value="Login / Register" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="280" y="300" as="sourcePoint"/>
+                        <mxPoint x="650" y="300" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow2" value="Cart data" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="280" y="360" as="sourcePoint"/>
+                        <mxPoint x="650" y="360" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow3" value="Order details" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="280" y="420" as="sourcePoint"/>
+                        <mxPoint x="650" y="420" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow4" value="Profile Updates" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="280" y="480" as="sourcePoint"/>
+                        <mxPoint x="650" y="480" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow5" value="Payment request" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="280" y="540" as="sourcePoint"/>
+                        <mxPoint x="650" y="540" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow5b" value="Custom Design Request" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="280" y="600" as="sourcePoint"/>
+                        <mxPoint x="650" y="600" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow5c" value="Wishlist Updates" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="280" y="660" as="sourcePoint"/>
+                        <mxPoint x="650" y="660" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow5d" value="Chatbot Queries" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="280" y="720" as="sourcePoint"/>
+                        <mxPoint x="650" y="720" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow5e" value="Product Reviews" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="280" y="780" as="sourcePoint"/>
+                        <mxPoint x="650" y="780" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow6" value="Product list" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="650" y="330" as="sourcePoint"/>
+                        <mxPoint x="280" y="330" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow6b" value="Order status" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="650" y="390" as="sourcePoint"/>
+                        <mxPoint x="280" y="390" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow6c" value="Chatbot Responses" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="650" y="450" as="sourcePoint"/>
+                        <mxPoint x="280" y="450" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow6d" value="Design Status" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="650" y="510" as="sourcePoint"/>
+                        <mxPoint x="280" y="510" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow6e" value="Notifications" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="650" y="570" as="sourcePoint"/>
+                        <mxPoint x="280" y="570" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow6f" value="Wishlist Data" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="650" y="630" as="sourcePoint"/>
+                        <mxPoint x="280" y="630" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow6g" value="Coupons &amp; Offers" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="650" y="690" as="sourcePoint"/>
+                        <mxPoint x="280" y="690" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow7" value="Product Data" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="1350" y="330" as="sourcePoint"/>
+                        <mxPoint x="1720" y="330" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow8" value="Order Reports" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="1350" y="390" as="sourcePoint"/>
+                        <mxPoint x="1720" y="390" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow9" value="Customer Data" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="1350" y="450" as="sourcePoint"/>
+                        <mxPoint x="1720" y="450" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow9b" value="Design Requests" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="1350" y="510" as="sourcePoint"/>
+                        <mxPoint x="1720" y="510" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow9c" value="Review Data" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="1350" y="570" as="sourcePoint"/>
+                        <mxPoint x="1720" y="570" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow9d" value="Sales Analytics" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="1350" y="630" as="sourcePoint"/>
+                        <mxPoint x="1720" y="630" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow9e" value="Wishlist Reports" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="1350" y="690" as="sourcePoint"/>
+                        <mxPoint x="1720" y="690" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow9f" value="Chatbot Analytics" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="1350" y="750" as="sourcePoint"/>
+                        <mxPoint x="1720" y="750" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow10" value="Product Management" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="1720" y="300" as="sourcePoint"/>
+                        <mxPoint x="1350" y="300" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow11" value="Order Management" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="1720" y="360" as="sourcePoint"/>
+                        <mxPoint x="1350" y="360" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow11b" value="User Management" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="1720" y="420" as="sourcePoint"/>
+                        <mxPoint x="1350" y="420" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow11c" value="Design Approvals" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="1720" y="480" as="sourcePoint"/>
+                        <mxPoint x="1350" y="480" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow11d" value="Review Management" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="1720" y="540" as="sourcePoint"/>
+                        <mxPoint x="1350" y="540" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow11e" value="Coupon Management" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="1720" y="600" as="sourcePoint"/>
+                        <mxPoint x="1350" y="600" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow11f" value="Notification Management" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="1720" y="660" as="sourcePoint"/>
+                        <mxPoint x="1350" y="660" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow11g" value="Wishlist Monitoring" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="1720" y="720" as="sourcePoint"/>
+                        <mxPoint x="1350" y="720" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow11h" value="Chatbot Configuration" style="endArrow=classic;html=1;fontSize=24;strokeWidth=1.5;strokeColor=#000000;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="1720" y="780" as="sourcePoint"/>
+                        <mxPoint x="1350" y="780" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
+
+
+

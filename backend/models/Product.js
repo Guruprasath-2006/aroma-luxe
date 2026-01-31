@@ -41,7 +41,7 @@ const productSchema = new mongoose.Schema({
   },
   images: [{
     type: String,
-    required: true
+    required: [true, 'Product image is required']
   }],
   stock: {
     type: Number,
@@ -79,7 +79,7 @@ const productSchema = new mongoose.Schema({
   },
   duration: {
     type: String,
-    enum: ['1-2 Days', '3-7 Days', '1-2 Weeks', '2-3 Weeks', '2-4 Weeks', '1-3 Months', '3-6 Months', 'Custom']
+    enum: ['1-2 Days', '3-7 Days', '1-2 Weeks', '2-3 Weeks', '2-4 Weeks', '3-6 Weeks', '1-3 Months', '3-6 Months', '6-12 Months', '12-24 Months', 'Custom']
   },
   complexity: {
     type: String,

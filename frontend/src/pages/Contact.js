@@ -19,6 +19,7 @@ const Contact = () => {
     name: '',
     email: '',
     phone: '',
+  
     subject: '',
     message: ''
   });
@@ -32,11 +33,19 @@ const Contact = () => {
     setLoading(true);
 
     try {
-      // Send email using EmailJS or your backend
-      // For now, we'll just show a success message
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
+      // Validation
+      if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+        toast.error('Please fill in all required fields');
+        setLoading(false);
+        return;
+      }
+
+      // Send contact form data to backend
+      const { data } = await axios.post('/api/contact', formData);
       
-      toast.success('Message sent successfully! We will get back to you soon.');
+      toast.success(data.message || 'Message sent successfully! We will get back to you soon.');
+      
+      // Reset form
       setFormData({
         name: '',
         email: '',
@@ -45,7 +54,9 @@ const Contact = () => {
         message: ''
       });
     } catch (error) {
-      toast.error('Failed to send message. Please try again.');
+      console.error('Contact form error:', error);
+      const errorMessage = error.response?.data?.message || 'Failed to send message. Please try again.';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

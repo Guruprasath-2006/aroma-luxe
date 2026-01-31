@@ -14,10 +14,10 @@ const AddProduct = () => {
   const [imagePreviews, setImagePreviews] = useState([]);
   const [formData, setFormData] = useState({
     title: '',
-    brand: '',
+    brand: 'Velan Engineering',
     price: '',
-    category: 'Engineering Consulting',
-    size: '100ml',
+    category: 'Consulting',
+    size: 'Standard Package',
     description: '',
     rating: '4.5',
     stock: ''
@@ -73,21 +73,52 @@ const AddProduct = () => {
   };
 
   const uploadToCloudinary = async (file) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', 'aroma_luxe'); // You'll need to create this in Cloudinary
-    formData.append('cloud_name', 'your_cloud_name'); // Replace with your Cloudinary cloud name
-
-    try {
-      const response = await axios.post(
-        'https://api.cloudinary.com/v1_1/your_cloud_name/image/upload', // Replace with your cloud name
-        formData
-      );
-      return response.data.secure_url;
-    } catch (error) {
-      console.error('Error uploading to Cloudinary:', error);
-      throw error;
-    }
+    // Compress and convert image to base64
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          // Create canvas for compression
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          // Set max dimensions
+          const MAX_WIDTH = 1200;
+          const MAX_HEIGHT = 1200;
+          
+          let width = img.width;
+          let height = img.height;
+          
+          // Calculate new dimensions
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          
+          // Draw and compress
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // Convert to base64 with compression (0.8 quality)
+          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
+          resolve(compressedBase64);
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -98,35 +129,67 @@ const AddProduct = () => {
       return;
     }
 
+    // Validation
+    if (!formData.title || !formData.brand || !formData.price || !formData.description) {
+      toast.error('Please fill all required fields');
+      return;
+    }
+
+    if (Number(formData.price) <= 0) {
+      toast.error('Price must be greater than 0');
+      return;
+    }
+
+    if (Number(formData.stock) < 0) {
+      toast.error('Stock cannot be negative');
+      return;
+    }
+
     setLoading(true);
 
     try {
-      // Upload all images to Cloudinary
-      toast.info('Uploading images...');
+      // Upload all images
+      toast.info('Processing images...');
       const imageUrls = await Promise.all(
         imageFiles.map(file => uploadToCloudinary(file))
       );
 
       const productData = {
-        ...formData,
+        title: formData.title.trim(),
+        brand: formData.brand.trim(),
         price: Number(formData.price),
+        category: formData.category,
+        size: formData.size,
+        description: formData.description.trim(),
         rating: Number(formData.rating),
         stock: Number(formData.stock),
         images: imageUrls
       };
 
+      console.log('Sending product data:', productData);
+
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
       };
 
-      await axios.post('/api/products', productData, config);
+      const response = await axios.post('/api/products', productData, config);
+      console.log('Product created:', response.data);
+      
       toast.success('Product added successfully!');
       navigate('/admin/products');
     } catch (error) {
       console.error('Error adding product:', error);
-      toast.error(error.response?.data?.message || 'Failed to add product');
+      console.error('Error response:', error.response?.data);
+      
+      const errorMessage = error.response?.data?.message || 
+                          error.response?.data?.error || 
+                          error.message || 
+                          'Failed to add product';
+      
+      toast.error(errorMessage);
       setLoading(false);
     }
   };
@@ -224,23 +287,25 @@ const AddProduct = () => {
                   onChange={handleChange}
                   className="w-full px-4 py-3 bg-luxury-black text-white border border-primary-600/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                 >
-                  <option value="Mechanical Engineering">Mechanical Engineering</option>
-                  <option value="Industrial Engineering">Industrial Engineering</option>
-                  <option value="Engineering Consulting">Engineering Consulting</option>
+                  <option value="Mechanical">Mechanical</option>
+                  <option value="Industrial">Industrial</option>
+                  <option value="Consulting">Consulting</option>
+                  <option value="Maintenance">Maintenance</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-gray-300 mb-2">Size *</label>
+                <label className="block text-gray-300 mb-2">Package Type *</label>
                 <select
                   name="size"
                   value={formData.size}
                   onChange={handleChange}
                   className="w-full px-4 py-3 bg-luxury-black text-white border border-primary-600/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                 >
-                  <option value="50ml">50ml</option>
-                  <option value="100ml">100ml</option>
-                  <option value="150ml">150ml</option>
+                  <option value="Standard Package">Standard Package</option>
+                  <option value="Basic Package">Basic Package</option>
+                  <option value="Premium Package">Premium Package</option>
+                  <option value="Enterprise Package">Enterprise Package</option>
                 </select>
               </div>
 

@@ -11,12 +11,17 @@ connectDB();
 
 const app = express();
 
-// Body parser
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Body parser with increased limit for base64 images
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-// Enable CORS
-app.use(cors());
+// Enable CORS with production support
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
@@ -27,6 +32,8 @@ app.use('/api/reviews', require('./routes/reviewRoutes'));
 app.use('/api/wishlist', require('./routes/wishlistRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
 app.use('/api/designs', require('./routes/designRoutes'));
+app.use('/api/chatbot', require('./routes/chatbotRoutes'));
+app.use('/api/contact', require('./routes/contactRoutes'));
 
 // Welcome route
 app.get('/', (req, res) => {
@@ -41,7 +48,9 @@ app.get('/', (req, res) => {
       reviews: '/api/reviews',
       wishlist: '/api/wishlist',
       notifications: '/api/notifications',
-      designs: '/api/designs'
+      designs: '/api/designs',
+      chatbot: '/api/chatbot',
+      contact: '/api/contact'
     }
   });
 });

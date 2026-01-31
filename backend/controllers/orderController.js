@@ -102,17 +102,27 @@ exports.getMyOrders = async (req, res) => {
 // @access  Private/Admin
 exports.getAllOrders = async (req, res) => {
   try {
-    const orders = await Order.find()
+    const { user } = req.query;
+    
+    // Build query
+    let query = {};
+    if (user) {
+      query.user = user;
+    }
+
+    const orders = await Order.find(query)
       .populate('user', 'name email')
       .populate('products.product', 'title brand')
-      .sort({ orderDate: -1 });
+      .sort({ createdAt: -1 });
 
     const totalAmount = orders.reduce((sum, order) => sum + order.totalAmount, 0);
+    const totalRevenue = orders.reduce((sum, order) => sum + (order.actualRevenue || order.totalAmount), 0);
 
     res.status(200).json({
       success: true,
       count: orders.length,
       totalAmount,
+      totalRevenue,
       orders
     });
   } catch (error) {
@@ -164,9 +174,9 @@ exports.getOrder = async (req, res) => {
 // @access  Private/Admin
 exports.updateOrderStatus = async (req, res) => {
   try {
-    const { status } = req.body;
+    const { status, actualRevenue } = req.body;
 
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate('user');
 
     if (!order) {
       return res.status(404).json({
@@ -175,14 +185,75 @@ exports.updateOrderStatus = async (req, res) => {
       });
     }
 
-    order.status = status;
+    const User = require('../models/User');
+    const previousStatus = order.status;
+    const previousRevenue = order.actualRevenue;
+
+    // Update status if provided
+    if (status) {
+      order.status = status;
+      
+      // If order is being delivered, update user stats
+      if (status === 'Delivered' && previousStatus !== 'Delivered') {
+        const revenueAmount = order.actualRevenue || order.totalAmount;
+        
+        // Update user's total spent and order count
+        await User.findByIdAndUpdate(order.user._id, {
+          $inc: { 
+            totalSpent: revenueAmount,
+            orderCount: 1
+          }
+        });
+        
+        console.log(`✅ Updated user stats for delivery: +₹${revenueAmount}`);
+      }
+      
+      // If order was delivered and now cancelled/refunded, reverse the stats
+      if ((status === 'Cancelled' || status === 'Refunded') && previousStatus === 'Delivered') {
+        const revenueAmount = order.actualRevenue || order.totalAmount;
+        
+        await User.findByIdAndUpdate(order.user._id, {
+          $inc: { 
+            totalSpent: -revenueAmount,
+            orderCount: -1
+          }
+        });
+        
+        console.log(`⏪ Reversed user stats for cancellation: -₹${revenueAmount}`);
+      }
+    }
+
+    // Update actual revenue if provided
+    if (actualRevenue !== undefined && actualRevenue !== null) {
+      const oldRevenue = order.actualRevenue || 0;
+      const newRevenue = Number(actualRevenue);
+      order.actualRevenue = newRevenue;
+      
+      // If order is already delivered, update the user's totalSpent with the difference
+      if (order.status === 'Delivered') {
+        const difference = newRevenue - (previousRevenue || order.totalAmount);
+        
+        if (difference !== 0) {
+          await User.findByIdAndUpdate(order.user._id, {
+            $inc: { totalSpent: difference }
+          });
+          
+          console.log(`💰 Updated user totalSpent by ₹${difference} (Final Amount: ₹${newRevenue})`);
+        }
+      }
+    }
+
     await order.save();
+
+    // Fetch updated order with user details
+    const updatedOrder = await Order.findById(order._id).populate('user', 'name email');
 
     res.status(200).json({
       success: true,
-      order
+      order: updatedOrder
     });
   } catch (error) {
+    console.error('Error updating order:', error);
     res.status(500).json({
       success: false,
       message: error.message
@@ -370,6 +441,7 @@ exports.getDashboardStats = async (req, res) => {
   try {
     const User = require('../models/User');
     const Review = require('../models/Review');
+    const Design = require('../models/Design');
 
     // Order stats
     const totalOrders = await Order.countDocuments();
@@ -407,6 +479,10 @@ exports.getDashboardStats = async (req, res) => {
         $gte: new Date(currentYear, currentMonth, 1)
       }
     });
+
+    // Design stats
+    const totalDesigns = await Design.countDocuments();
+    const pendingDesigns = await Design.countDocuments({ status: 'Submitted' });
 
     // Review stats
     const totalReviews = await Review.countDocuments();
@@ -471,6 +547,15 @@ exports.getDashboardStats = async (req, res) => {
     res.status(200).json({
       success: true,
       stats: {
+        // Flat properties for dashboard cards
+        totalRevenue: Math.round(totalRevenue),
+        totalOrders: totalOrders,
+        pendingOrders: pendingOrders,
+        totalProducts: totalProducts,
+        totalUsers: totalUsers,
+        totalDesigns: totalDesigns,
+        
+        // Detailed nested stats
         orders: {
           total: totalOrders,
           pending: pendingOrders,
@@ -491,6 +576,10 @@ exports.getDashboardStats = async (req, res) => {
         users: {
           total: totalUsers,
           newThisMonth: newUsersThisMonth
+        },
+        designs: {
+          total: totalDesigns,
+          pending: pendingDesigns
         },
         reviews: {
           total: totalReviews

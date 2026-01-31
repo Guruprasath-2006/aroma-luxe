@@ -14,6 +14,7 @@ import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Orders from './pages/Orders';
+import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Contact from './pages/Contact';
@@ -24,6 +25,7 @@ import AdminEditProduct from './pages/Admin/EditProduct';
 import AdminOrders from './pages/Admin/Orders';
 import AdminUsers from './pages/Admin/Users';
 import AdminDesigns from './pages/Admin/Designs';
+import AdminContactMessages from './pages/Admin/ContactMessages';
 import CustomDesign from './pages/CustomDesign';
 import MyDesigns from './pages/MyDesigns';
 import PrivateRoute from './components/PrivateRoute';
@@ -47,6 +49,7 @@ function App() {
           {/* Protected Routes */}
           <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
           <Route path="/orders" element={<PrivateRoute><Orders /></PrivateRoute>} />
+          <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
           <Route path="/designs/my-designs" element={<PrivateRoute><MyDesigns /></PrivateRoute>} />
           
           {/* Admin Routes */}
@@ -57,6 +60,7 @@ function App() {
           <Route path="/admin/orders" element={<AdminRoute><AdminOrders /></AdminRoute>} />
           <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
           <Route path="/admin/designs" element={<AdminRoute><AdminDesigns /></AdminRoute>} />
+          <Route path="/admin/contact-messages" element={<AdminRoute><AdminContactMessages /></AdminRoute>} />
         </Routes>
       </main>
       <Footer />

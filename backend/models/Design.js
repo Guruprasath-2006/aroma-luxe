@@ -51,7 +51,7 @@ const designSchema = new mongoose.Schema({
     duration: String
   },
   location: {
-    type: String,
+    locationType: String,
     address: String,
     city: String,
     state: String,

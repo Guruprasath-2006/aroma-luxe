@@ -331,19 +331,34 @@ const AdminDesigns = () => {
                           <FiUser className="text-primary-500" />
                           Customer Information
                         </h3>
-                        <div className="space-y-3">
-                          <div>
-                            <label className="text-xs text-gray-500">Name</label>
-                            <p className="text-white">{selectedDesign.user?.name}</p>
+                        <div className="space-y-4">
+                          <div className="bg-luxury-black p-4 rounded-lg">
+                            <label className="text-xs text-gray-500 uppercase tracking-wide font-semibold">Full Name</label>
+                            <p className="text-white font-bold text-lg mt-1">{selectedDesign.user?.name || 'N/A'}</p>
                           </div>
-                          <div>
-                            <label className="text-xs text-gray-500">Email</label>
-                            <p className="text-white">{selectedDesign.user?.email}</p>
+                          
+                          <div className="bg-luxury-black p-4 rounded-lg">
+                            <label className="text-xs text-gray-500 uppercase tracking-wide font-semibold">Email Address</label>
+                            <p className="text-primary-400 font-semibold mt-1">{selectedDesign.user?.email || 'N/A'}</p>
                           </div>
-                          <div>
-                            <label className="text-xs text-gray-500">Phone</label>
-                            <p className="text-white">{selectedDesign.user?.phone || 'Not provided'}</p>
+                          
+                          <div className="bg-luxury-black p-4 rounded-lg">
+                            <label className="text-xs text-gray-500 uppercase tracking-wide font-semibold">Phone Number</label>
+                            <p className="text-white font-semibold mt-1">{selectedDesign.user?.phone || 'Not provided'}</p>
                           </div>
+                          
+                          {selectedDesign.user?.createdAt && (
+                            <div className="bg-luxury-black p-4 rounded-lg">
+                              <label className="text-xs text-gray-500 uppercase tracking-wide font-semibold">Member Since</label>
+                              <p className="text-white font-semibold mt-1">
+                                {new Date(selectedDesign.user.createdAt).toLocaleDateString('en-US', { 
+                                  year: 'numeric', 
+                                  month: 'long', 
+                                  day: 'numeric' 
+                                })}
+                              </p>
+                            </div>
+                          )}
                         </div>
                       </div>
 

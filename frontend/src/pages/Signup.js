@@ -8,6 +8,7 @@ const Signup = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     password: '',
     confirmPassword: ''
   });
@@ -19,22 +20,54 @@ const Signup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const validateForm = () => {
+    // Validate name (only letters and spaces, at least 2 characters)
+    const nameRegex = /^[a-zA-Z\s]{2,50}$/;
+    if (!nameRegex.test(formData.name.trim())) {
+      toast.error('Please enter a valid name (letters only, 2-50 characters)');
+      return false;
+    }
+
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error('Please enter a valid email address');
+      return false;
+    }
+
+    // Validate phone number (Indian format: +91 followed by 10 digits)
+    const phoneRegex = /^(\+91)?[6-9]\d{9}$/;
+    if (!phoneRegex.test(formData.phone.replace(/\s/g, ''))) {
+      toast.error('Please enter a valid Indian phone number (10 digits starting with 6-9)');
+      return false;
+    }
+
+    // Validate password
+    if (formData.password.length < 6) {
+      toast.error('Password must be at least 6 characters');
+      return false;
+    }
+
+    // Check if passwords match
+    if (formData.password !== formData.confirmPassword) {
+      toast.error('Passwords do not match');
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      toast.error('Passwords do not match');
-      return;
-    }
-
-    if (formData.password.length < 6) {
-      toast.error('Password must be at least 6 characters');
+    // Validate form before submission
+    if (!validateForm()) {
       return;
     }
 
     setLoading(true);
 
-    const result = await register(formData.name, formData.email, formData.password);
+    const result = await register(formData.name, formData.email, formData.phone, formData.password);
 
     if (result.success) {
       toast.success('Account created successfully!');
@@ -54,7 +87,7 @@ const Signup = () => {
         <motion.div 
           className="absolute inset-0 opacity-5"
           style={{
-            backgroundImage: 'repeating-linear-gradient(0deg, rgba(255, 111, 0, 0.3) 0px, transparent 1px, transparent 20px), repeating-linear-gradient(90deg, rgba(255, 111, 0, 0.3) 0px, transparent 1px, transparent 20px)',
+            backgroundImage: 'repeating-linear-gradient(0deg, rgba(34, 211, 238, 0.3) 0px, transparent 1px, transparent 20px), repeating-linear-gradient(90deg, rgba(34, 211, 238, 0.3) 0px, transparent 1px, transparent 20px)',
           }}
           animate={{
             opacity: [0.03, 0.08, 0.03],
@@ -72,7 +105,7 @@ const Signup = () => {
             cx="20%"
             cy="20%"
             r="100"
-            stroke="rgba(255, 111, 0, 0.5)"
+            stroke="rgba(34, 211, 238, 0.5)"
             strokeWidth="2"
             fill="none"
             initial={{ pathLength: 0, rotate: 0 }}
@@ -83,7 +116,7 @@ const Signup = () => {
             cx="80%"
             cy="30%"
             r="150"
-            stroke="rgba(255, 111, 0, 0.3)"
+            stroke="rgba(34, 211, 238, 0.3)"
             strokeWidth="2"
             fill="none"
             strokeDasharray="10 5"
@@ -94,7 +127,7 @@ const Signup = () => {
             cx="70%"
             cy="80%"
             r="80"
-            stroke="rgba(255, 111, 0, 0.4)"
+            stroke="rgba(34, 211, 238, 0.4)"
             strokeWidth="1"
             fill="none"
             animate={{ scale: [1, 1.2, 1] }}
@@ -174,9 +207,9 @@ const Signup = () => {
               animate={{
                 scale: [1, 1.1, 1],
                 filter: [
-                  'drop-shadow(0 0 10px rgba(255, 111, 0, 0.5))',
-                  'drop-shadow(0 0 20px rgba(255, 111, 0, 0.8))',
-                  'drop-shadow(0 0 10px rgba(255, 111, 0, 0.5))',
+                  'drop-shadow(0 0 10px rgba(34, 211, 238, 0.5))',
+                  'drop-shadow(0 0 20px rgba(34, 211, 238, 0.8))',
+                  'drop-shadow(0 0 10px rgba(34, 211, 238, 0.5))',
                 ]
               }}
               transition={{ duration: 2, repeat: Infinity }}
@@ -281,6 +314,30 @@ const Signup = () => {
                 onChange={handleChange}
                 className="appearance-none relative block w-full px-4 py-3 border border-primary-600/30 bg-luxury-black text-white placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                 placeholder="engineer@velan.com"
+              />
+            </motion.div>
+
+            <motion.div
+              initial={{ x: -50, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.65 }}
+            >
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-2 flex items-center">
+                <span className="mr-2">📱</span> Phone Number
+              </label>
+              <motion.input
+                whileFocus={{ 
+                  scale: 1.02, 
+                  borderColor: 'rgba(255, 111, 0, 1)',
+                  boxShadow: '0 0 20px rgba(255, 111, 0, 0.3)'
+                }}
+                id="phone"
+                name="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={handleChange}
+                className="appearance-none relative block w-full px-4 py-3 border border-primary-600/30 bg-luxury-black text-white placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                placeholder="+91 9876543210"
               />
             </motion.div>
             

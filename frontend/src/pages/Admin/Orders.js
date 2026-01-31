@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
@@ -31,6 +31,7 @@ const Orders = () => {
   const [showModal, setShowModal] = useState(false);
   const [filterStatus, setFilterStatus] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [actualRevenue, setActualRevenue] = useState('');
   const { token } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -40,6 +41,11 @@ const Orders = () => {
     fetchOrders();
   }, []);
 
+  useEffect(() => {
+    console.log('📊 Orders state updated, count:', orders.length);
+    console.log('💰 Calculated total revenue:', orders.reduce((sum, order) => sum + (order.actualRevenue || order.totalAmount), 0));
+  }, [orders]);
+
   const fetchOrders = async () => {
     try {
       const config = {
@@ -48,6 +54,8 @@ const Orders = () => {
         }
       };
       const { data } = await axios.get('/api/orders', config);
+      console.log('📦 Fetched orders:', data.orders.length);
+      console.log('💰 Total Revenue from backend:', data.totalRevenue);
       setOrders(data.orders);
       setLoading(false);
     } catch (error) {
@@ -64,15 +72,66 @@ const Orders = () => {
           Authorization: `Bearer ${token}`
         }
       };
-      await axios.put(`/api/orders/${orderId}`, { status: newStatus }, config);
-      toast.success('Order status updated successfully');
-      fetchOrders();
+      
+      console.log('📦 Changing order status to:', newStatus);
+      
+      const response = await axios.put(`/api/orders/${orderId}`, { status: newStatus }, config);
+      
+      console.log('✅ Status changed, response:', response.data);
+      
+      toast.success(`Order status updated to ${newStatus}`);
+      
+      // Refresh orders list to get updated user stats and recalculate revenue
+      await fetchOrders();
+      
+      // Update selected order
       if (selectedOrder && selectedOrder._id === orderId) {
-        setSelectedOrder({ ...selectedOrder, status: newStatus });
+        setSelectedOrder(response.data.order);
       }
+      
+      console.log('✅ Orders list refreshed after status change');
     } catch (error) {
       console.error('Error updating order:', error);
-      toast.error('Failed to update order status');
+      toast.error(error.response?.data?.message || 'Failed to update order status');
+    }
+  };
+
+  const handleActualRevenueUpdate = async (orderId) => {
+    if (!actualRevenue || isNaN(actualRevenue) || Number(actualRevenue) < 0) {
+      toast.error('Please enter a valid revenue amount');
+      return;
+    }
+
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+      
+      console.log('💰 Updating actual revenue to:', actualRevenue);
+      
+      const response = await axios.put(`/api/orders/${orderId}`, { actualRevenue: Number(actualRevenue) }, config);
+      
+      console.log('✅ Revenue updated, new order data:', response.data.order);
+      
+      toast.success('Actual revenue updated successfully!');
+      
+      // Refresh orders list - this will update the revenue statistics
+      await fetchOrders();
+      
+      // Update selected order with fresh data from response
+      if (selectedOrder && selectedOrder._id === orderId) {
+        setSelectedOrder(response.data.order);
+      }
+      
+      // Clear input field
+      setActualRevenue('');
+      
+      console.log('✅ Orders list refreshed');
+    } catch (error) {
+      console.error('Error updating actual revenue:', error);
+      toast.error(error.response?.data?.message || 'Failed to update actual revenue');
     }
   };
 
@@ -119,15 +178,29 @@ const Orders = () => {
     return matchesStatus && matchesSearch;
   });
 
-  const stats = {
-    total: orders.length,
-    pending: orders.filter(o => o.status === 'Pending').length,
-    processing: orders.filter(o => o.status === 'Processing').length,
-    shipped: orders.filter(o => o.status === 'Shipped').length,
-    delivered: orders.filter(o => o.status === 'Delivered').length,
-    cancelled: orders.filter(o => o.status === 'Cancelled').length,
-    totalRevenue: orders.reduce((sum, order) => sum + order.totalAmount, 0)
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedOrder(null);
+    setActualRevenue('');
   };
+
+  const stats = useMemo(() => {
+    const totalRevenue = orders.reduce((sum, order) => {
+      const revenue = order.actualRevenue || order.totalAmount;
+      console.log(`Order ${order._id?.slice(-6)}: actualRevenue=${order.actualRevenue}, totalAmount=${order.totalAmount}, using=${revenue}`);
+      return sum + revenue;
+    }, 0);
+    
+    return {
+      total: orders.length,
+      pending: orders.filter(o => o.status === 'Pending').length,
+      processing: orders.filter(o => o.status === 'Processing').length,
+      shipped: orders.filter(o => o.status === 'Shipped').length,
+      delivered: orders.filter(o => o.status === 'Delivered').length,
+      cancelled: orders.filter(o => o.status === 'Cancelled').length,
+      totalRevenue
+    };
+  }, [orders]);
 
   if (loading) {
     return (
@@ -368,7 +441,7 @@ const Orders = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={() => setShowModal(false)}
+            onClick={handleCloseModal}
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
@@ -390,7 +463,7 @@ const Orders = () => {
                     </p>
                   </div>
                   <button
-                    onClick={() => setShowModal(false)}
+                    onClick={handleCloseModal}
                     className="p-2 hover:bg-luxury-lightGray rounded-lg transition-colors"
                   >
                     <FiX className="w-6 h-6 text-gray-400 hover:text-white" />
@@ -438,17 +511,24 @@ const Orders = () => {
                       <FiUser className="text-primary-500" />
                       Customer Information
                     </h3>
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       <div>
-                        <p className="text-gray-400 text-xs mb-1">Name</p>
-                        <p className="text-white font-medium">{selectedOrder.user?.name || 'N/A'}</p>
+                        <p className="text-gray-400 text-xs mb-1">Full Name</p>
+                        <p className="text-white font-medium text-lg">{selectedOrder.shippingAddress?.fullName || selectedOrder.user?.name || 'N/A'}</p>
                       </div>
                       <div>
-                        <p className="text-gray-400 text-xs mb-1">Email</p>
+                        <p className="text-gray-400 text-xs mb-1">Email Address</p>
                         <p className="text-white font-medium flex items-center gap-2">
                           <FiMail className="w-4 h-4 text-primary-500" />
                           {selectedOrder.user?.email || 'N/A'}
                         </p>
+                      </div>
+                      <div className="bg-primary-500/10 border border-primary-500/30 rounded-lg p-4">
+                        <p className="text-gray-400 text-xs mb-1">📞 Contact Number (For Agent Callback)</p>
+                        <p className="text-primary-400 font-bold text-xl tracking-wide">
+                          {selectedOrder.shippingAddress?.phone || 'N/A'}
+                        </p>
+                        <p className="text-gray-400 text-xs mt-2">Call customer to confirm order details</p>
                       </div>
                     </div>
                   </div>
@@ -457,13 +537,38 @@ const Orders = () => {
                   <div className="p-6 bg-luxury-lightGray/30 rounded-xl border border-primary-600/20">
                     <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                       <FiMapPin className="text-primary-500" />
-                      Shipping Address
+                      Delivery Address
                     </h3>
-                    <div className="space-y-2 text-white">
-                      <p>{selectedOrder.shippingAddress?.street || 'N/A'}</p>
-                      <p>{selectedOrder.shippingAddress?.city || 'N/A'}, {selectedOrder.shippingAddress?.state || 'N/A'}</p>
-                      <p>{selectedOrder.shippingAddress?.postalCode || 'N/A'}</p>
-                      <p>{selectedOrder.shippingAddress?.country || 'N/A'}</p>
+                    <div className="space-y-3">
+                      <div>
+                        <p className="text-gray-400 text-xs mb-1">Customer Name</p>
+                        <p className="text-white font-medium">{selectedOrder.shippingAddress?.fullName || 'N/A'}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400 text-xs mb-1">Street Address</p>
+                        <p className="text-white">{selectedOrder.shippingAddress?.address || 'N/A'}</p>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <p className="text-gray-400 text-xs mb-1">City</p>
+                          <p className="text-white">{selectedOrder.shippingAddress?.city || 'N/A'}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-400 text-xs mb-1">Postal Code</p>
+                          <p className="text-white">{selectedOrder.shippingAddress?.postalCode || 'N/A'}</p>
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-gray-400 text-xs mb-1">Country</p>
+                        <p className="text-white">{selectedOrder.shippingAddress?.country || 'N/A'}</p>
+                      </div>
+                      <div className="pt-3 border-t border-primary-600/20">
+                        <p className="text-gray-400 text-xs mb-1">Contact Phone</p>
+                        <p className="text-primary-400 font-semibold flex items-center gap-2">
+                          <FiPhone className="w-4 h-4" />
+                          {selectedOrder.shippingAddress?.phone || 'N/A'}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -526,10 +631,50 @@ const Orders = () => {
                         <span>-₹{(selectedOrder.discount || 0).toFixed(2)}</span>
                       </div>
                     )}
-                    <div className="pt-3 border-t border-primary-600/30 flex justify-between text-white text-lg font-bold">
-                      <span>Total Amount</span>
-                      <span className="text-primary-500">₹{selectedOrder.totalAmount.toFixed(2)}</span>
+                    <div className="pt-3 border-t border-primary-600/30 flex justify-between text-gray-300">
+                      <span>Estimated Total</span>
+                      <span className="text-yellow-400">₹{selectedOrder.totalAmount.toFixed(2)}</span>
                     </div>
+                    
+                    {/* Actual Revenue Section */}
+                    <div className="pt-3 border-t border-primary-600/30">
+                      <div className="mb-3">
+                        <label className="block text-gray-400 text-sm mb-2">
+                          💰 Actual Revenue (After Project Completion)
+                        </label>
+                        <div className="space-y-2">
+                          {selectedOrder.actualRevenue && !actualRevenue && (
+                            <div className="flex justify-between items-center text-white text-xl font-bold mb-2">
+                              <span className="text-green-400">Final Amount:</span>
+                              <span className="text-green-500">₹{selectedOrder.actualRevenue.toFixed(2)}</span>
+                            </div>
+                          )}
+                          <div className="flex gap-2">
+                            <input
+                              type="number"
+                              placeholder={selectedOrder.actualRevenue ? `Current: ₹${selectedOrder.actualRevenue}` : "Enter final amount"}
+                              value={actualRevenue}
+                              onChange={(e) => setActualRevenue(e.target.value)}
+                              className="flex-1 px-4 py-2 bg-luxury-black text-white border border-primary-600/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                            />
+                            <button
+                              onClick={() => handleActualRevenueUpdate(selectedOrder._id)}
+                              disabled={!actualRevenue}
+                              className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {selectedOrder.actualRevenue ? 'Update' : 'Save'}
+                            </button>
+                          </div>
+                          <p className="text-xs text-gray-400">
+                            {selectedOrder.actualRevenue 
+                              ? 'Update the final project cost. This will affect user statistics.'
+                              : 'Enter the final project cost after completion'
+                            }
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
                     <div className="pt-3 border-t border-primary-600/30 flex items-center justify-between">
                       <span className="text-gray-400">Payment Method</span>
                       <div className="flex items-center gap-2 text-white">

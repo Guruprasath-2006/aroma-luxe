@@ -48,9 +48,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (name, email, password) => {
+  const register = async (name, email, phone, password) => {
     try {
-      const { data } = await axios.post('/api/auth/register', { name, email, password });
+      const { data } = await axios.post('/api/auth/register', { name, email, phone, password });
       setToken(data.token);
       setUser(data.user);
       localStorage.setItem('token', data.token);
@@ -73,6 +73,10 @@ export const AuthProvider = ({ children }) => {
     return user && user.role === 'admin';
   };
 
+  const updateUser = (updatedUser) => {
+    setUser(updatedUser);
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -81,7 +85,8 @@ export const AuthProvider = ({ children }) => {
       login,
       register,
       logout,
-      isAdmin
+      isAdmin,
+      updateUser
     }}>
       {children}
     </AuthContext.Provider>

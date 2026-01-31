@@ -1,0 +1,124 @@
+# ✅ FREE DEPLOYMENT CHECKLIST
+
+Print this and check off as you go!
+
+---
+
+## 🗄️ STEP 1: MONGODB ATLAS (3 min)
+
+- [ ] Go to mongodb.com/cloud/atlas/register
+- [ ] Sign up (FREE)
+- [ ] Create M0 FREE cluster (Mumbai region)
+- [ ] Create database user: velan_admin
+- [ ] **SAVE PASSWORD:** _________________
+- [ ] Whitelist all IPs (0.0.0.0/0)
+- [ ] Get connection string
+- [ ] **SAVE CONNECTION STRING:** _________________
+
+---
+
+## 📦 STEP 2: GITHUB (2 min)
+
+- [ ] Go to github.com/new
+- [ ] Create repository: aroma-luxe (Public)
+- [ ] Run in PowerShell:
+  ```powershell
+  cd e:\ACEDEMIC\aroma-luxe
+  git init
+  git add .
+  git commit -m "Ready for deployment"
+  git remote add origin https://github.com/YOUR_USERNAME/aroma-luxe.git
+  git push -u origin main
+  ```
+- [ ] Code pushed successfully
+
+---
+
+## 🔧 STEP 3: RENDER BACKEND (5 min)
+
+- [ ] Go to render.com
+- [ ] Sign up with GitHub
+- [ ] New + → Web Service
+- [ ] Connect aroma-luxe repo
+- [ ] Settings:
+  - Name: velan-engineering-backend
+  - Root Directory: backend
+  - Build: npm install
+  - Start: npm start
+  - Instance: Free
+- [ ] Add Environment Variables:
+  - [ ] PORT = 5000
+  - [ ] MONGODB_URI = (your connection string)
+  - [ ] JWT_SECRET = velan-super-secret-key-2026
+  - [ ] JWT_EXPIRE = 7d
+  - [ ] NODE_ENV = production
+  - [ ] GEMINI_API_KEY = AIzaSyAzmcKV0dHct3NzsGI4O9EoBCP7TE2QEDQ
+  - [ ] FRONTEND_URL = http://localhost:3000
+- [ ] Click Create Web Service
+- [ ] Wait for deployment (5-8 min)
+- [ ] **SAVE BACKEND URL:** _________________
+
+---
+
+## 🎨 STEP 4: VERCEL FRONTEND (3 min)
+
+- [ ] Go to vercel.com/signup
+- [ ] Sign up with GitHub
+- [ ] Add New → Project
+- [ ] Import aroma-luxe
+- [ ] Settings:
+  - Framework: Create React App
+  - Root Directory: frontend
+  - Build: npm run build
+  - Output: build
+- [ ] Add Environment Variable:
+  - Key: REACT_APP_API_URL
+  - Value: (your backend URL from step 3)
+- [ ] Click Deploy
+- [ ] Wait (2-3 min)
+- [ ] **SAVE FRONTEND URL:** _________________
+
+---
+
+## 🔄 STEP 5: UPDATE CORS (2 min)
+
+- [ ] Go back to Render
+- [ ] Click your service
+- [ ] Environment tab
+- [ ] Update FRONTEND_URL to your Vercel URL
+- [ ] Save (auto-redeploys)
+
+---
+
+## 🧪 STEP 6: TEST (2 min)
+
+- [ ] Open your Vercel URL
+- [ ] Homepage loads ✅
+- [ ] Products display ✅
+- [ ] Register/Login works ✅
+- [ ] Cart works ✅
+- [ ] Chatbot works ✅
+
+---
+
+## 🎉 DONE!
+
+**Your Live URLs:**
+
+Frontend: _________________
+Backend: _________________
+
+**Cost: ₹0/month** 🎉
+
+---
+
+**Share with:**
+- [ ] Professor
+- [ ] Friends
+- [ ] LinkedIn
+- [ ] Resume/Portfolio
+
+---
+
+**Total Time: ~15 minutes**
+**Total Cost: FREE (₹0)**
