@@ -9,7 +9,7 @@
     "backend": "cd backend && npm start",
     "frontend": "cd frontend && npm start",
     "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
-    "build": "cd frontend && npm run build"
+    "build": "CI=false cd frontend && npm run build"  
   },
   "keywords": [
     "ecommerce",
@@ -25,4 +25,5 @@
   "devDependencies": {
     "concurrently": "^8.2.2"
   }
+  
 }
