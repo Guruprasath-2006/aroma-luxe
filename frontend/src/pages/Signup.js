@@ -35,10 +35,10 @@ const Signup = () => {
       return false;
     }
 
-    // Validate phone number (Indian format: +91 followed by 10 digits)
-    const phoneRegex = /^(\+91)?[6-9]\d{9}$/;
+    // Validate phone number (Indian format: 10 digits starting with 6-9)
+    const phoneRegex = /^[6-9][0-9]{9}$/;
     if (!phoneRegex.test(formData.phone.replace(/\s/g, ''))) {
-      toast.error('Please enter a valid Indian phone number (10 digits starting with 6-9)');
+      toast.error('Please enter a valid 10-digit phone number starting with 6-9');
       return false;
     }
 
@@ -287,6 +287,10 @@ const Signup = () => {
                 required
                 value={formData.name}
                 onChange={handleChange}
+                minLength="2"
+                maxLength="50"
+                pattern="[A-Za-z\s.'-]{2,50}"
+                title="Name should contain only letters and be 2-50 characters long"
                 className="appearance-none relative block w-full px-4 py-3 border border-primary-600/30 bg-luxury-black text-white placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                 placeholder="Engineer Name"
               />
@@ -336,8 +340,12 @@ const Signup = () => {
                 type="tel"
                 value={formData.phone}
                 onChange={handleChange}
+                pattern="[0-9]{10}"
+                maxLength="10"
+                minLength="10"
+                title="Please enter exactly 10 digits"
                 className="appearance-none relative block w-full px-4 py-3 border border-primary-600/30 bg-luxury-black text-white placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                placeholder="+91 9876543210"
+                placeholder="9876543210"
               />
             </motion.div>
             
@@ -361,6 +369,9 @@ const Signup = () => {
                 required
                 value={formData.password}
                 onChange={handleChange}
+                minLength="6"
+                maxLength="128"
+                title="Password must be at least 6 characters long"
                 className="appearance-none relative block w-full px-4 py-3 border border-primary-600/30 bg-luxury-black text-white placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                 placeholder="Secure password (min. 6 characters)"
               />
@@ -386,6 +397,9 @@ const Signup = () => {
                 required
                 value={formData.confirmPassword}
                 onChange={handleChange}
+                minLength="6"
+                maxLength="128"
+                title="Password must be at least 6 characters long"
                 className="appearance-none relative block w-full px-4 py-3 border border-primary-600/30 bg-luxury-black text-white placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                 placeholder="Re-enter password"
               />

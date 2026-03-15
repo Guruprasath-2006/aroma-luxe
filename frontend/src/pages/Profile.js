@@ -93,6 +93,30 @@ const Profile = () => {
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
+
+    // Validate name
+    const nameRegex = /^[a-zA-Z\s]{2,50}$/;
+    if (!formData.name.trim() || !nameRegex.test(formData.name.trim())) {
+      toast.error('Name must be 2-50 characters and contain only letters');
+      return;
+    }
+
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email.trim() || !emailRegex.test(formData.email)) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+
+    // Validate phone (if provided)
+    if (formData.phone) {
+      const phoneRegex = /^[6-9][0-9]{9}$/;
+      if (!phoneRegex.test(formData.phone.replace(/[\s\-()]/g, ''))) {
+        toast.error('Please enter a valid 10-digit phone number starting with 6-9');
+        return;
+      }
+    }
+
     setLoading(true);
 
     try {
@@ -121,6 +145,12 @@ const Profile = () => {
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
+
+    // Validate current password is provided
+    if (!passwordData.currentPassword) {
+      toast.error('Please enter your current password');
+      return;
+    }
 
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       toast.error('Passwords do not match');
@@ -290,6 +320,10 @@ const Profile = () => {
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
+                        minLength="2"
+                        maxLength="50"
+                        pattern="[A-Za-z\s.'-]{2,50}"
+                        title="Name should contain only letters and be 2-50 characters long"
                         className="w-full px-4 py-3 bg-purple-50 border-2 border-purple-200 text-gray-800 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 focus:bg-white transition-all"
                         required
                       />
@@ -316,7 +350,11 @@ const Profile = () => {
                         name="phone"
                         value={formData.phone}
                         onChange={handleInputChange}
-                        placeholder="Enter your phone number"
+                        pattern="[0-9]{10}"
+                        maxLength="10"
+                        minLength="10"
+                        title="Please enter exactly 10 digits"
+                        placeholder="Enter your 10-digit phone number"
                         className="w-full px-4 py-3 bg-purple-50 border-2 border-purple-200 text-gray-800 placeholder-purple-400 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 focus:bg-white transition-all"
                       />
                     </div>

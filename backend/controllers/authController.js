@@ -15,6 +15,50 @@ exports.register = async (req, res) => {
   try {
     const { name, email, phone, password } = req.body;
 
+    // Input validation
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide name, email, and password'
+      });
+    }
+
+    // Name validation (2-50 characters, letters only)
+    if (name.trim().length < 2 || name.trim().length > 50) {
+      return res.status(400).json({
+        success: false,
+        message: 'Name must be between 2 and 50 characters'
+      });
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid email address'
+      });
+    }
+
+    // Phone validation (10 digits)
+    if (phone) {
+      const phoneRegex = /^[0-9]{10}$/;
+      if (!phoneRegex.test(phone.replace(/[\s\-()]/g, ''))) {
+        return res.status(400).json({
+          success: false,
+          message: 'Phone number must be exactly 10 digits'
+        });
+      }
+    }
+
+    // Password validation
+    if (password.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: 'Password must be at least 6 characters long'
+      });
+    }
+
     // Check if user exists
     const userExists = await User.findOne({ email });
     if (userExists) {

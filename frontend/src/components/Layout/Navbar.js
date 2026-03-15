@@ -18,13 +18,13 @@ const Navbar = () => {
 
   return (
     <nav className="bg-luxury-black border-b border-primary-600/20 sticky top-0 z-50 backdrop-blur-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16 sm:h-18 md:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="text-3xl font-bold font-serif"
+              className="text-xl sm:text-2xl md:text-3xl font-bold font-serif"
             >
               <span className="text-white">Velan</span>
               <span className="text-primary-500"> Engineering</span>
@@ -32,14 +32,14 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="text-white hover:text-primary-500 transition-colors">
+          <div className="hidden md:flex items-center space-x-4 lg:space-x-6 xl:space-x-8">
+            <Link to="/" className="text-sm lg:text-base text-white hover:text-primary-500 transition-colors">
               Home
             </Link>
-            <Link to="/shop" className="text-white hover:text-primary-500 transition-colors">
+            <Link to="/shop" className="text-sm lg:text-base text-white hover:text-primary-500 transition-colors">
               Services
             </Link>
-            <Link to="/design-studio" className="text-white hover:text-primary-500 transition-colors">
+            <Link to="/design-studio" className="text-sm lg:text-base text-white hover:text-primary-500 transition-colors">
               Design Studio
             </Link>
             {user && (
@@ -55,7 +55,7 @@ const Navbar = () => {
           </div>
 
           {/* Right Menu */}
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden md:flex items-center space-x-3 lg:space-x-4 xl:space-x-6">
             {/* Cart */}
             <Link to="/cart" className="relative">
               <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
@@ -70,28 +70,28 @@ const Navbar = () => {
 
             {/* User Menu */}
             {user ? (
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 lg:space-x-3">
                 <Link to="/profile" className="text-white hover:text-primary-500 transition-colors flex items-center space-x-1">
-                  <FiUser />
-                  <span className="text-sm">{user.name}</span>
+                  <FiUser className="text-lg" />
+                  <span className="text-xs lg:text-sm hidden lg:inline">{user.name}</span>
                 </Link>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleLogout}
-                  className="flex items-center space-x-2 px-4 py-2 gold-glow-btn text-black font-semibold rounded-lg"
+                  className="flex items-center space-x-1 lg:space-x-2 px-3 lg:px-4 py-2 gold-glow-btn text-black font-semibold rounded-lg text-sm"
                 >
-                  <FiLogOut />
-                  <span>Logout</span>
+                  <FiLogOut className="text-base" />
+                  <span className="hidden lg:inline">Logout</span>
                 </motion.button>
               </div>
             ) : (
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 lg:space-x-3">
                 <Link to="/login">
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-4 py-2 text-white border border-primary-500 rounded-lg hover:bg-primary-500 hover:text-black transition-all"
+                    className="px-3 lg:px-4 py-2 text-white border border-primary-500 rounded-lg hover:bg-primary-500 hover:text-black transition-all text-sm"
                   >
                     Login
                   </motion.button>
@@ -100,7 +100,7 @@ const Navbar = () => {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-4 py-2 gold-glow-btn text-black font-semibold rounded-lg"
+                    className="px-3 lg:px-4 py-2 gold-glow-btn text-black font-semibold rounded-lg text-sm"
                   >
                     Sign Up
                   </motion.button>

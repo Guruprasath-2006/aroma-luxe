@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
-import { FiPackage, FiShoppingBag, FiUsers, FiDollarSign, FiTrendingUp, FiCpu, FiPlus, FiSettings, FiEye, FiUserCheck, FiFileText, FiMail } from 'react-icons/fi';
+import { FiPackage, FiShoppingBag, FiUsers, FiDollarSign, FiTrendingUp, FiCpu, FiPlus, FiSettings, FiEye, FiUserCheck, FiFileText, FiMail, FiBarChart2 } from 'react-icons/fi';
 import { AuthContext } from '../../context/AuthContext';
 
 const Dashboard = () => {
@@ -146,7 +146,7 @@ const Dashboard = () => {
               Quick Actions
             </motion.h2>
             
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-6">
               {/* Add New Product */}
               <Link to="/admin/products/add">
                 <motion.div
@@ -287,6 +287,30 @@ const Dashboard = () => {
                       <FiMail className="text-4xl mx-auto text-slate-300" />
                     </motion.div>
                     <p className="text-slate-200 font-bold text-sm">Contact Messages</p>
+                  </div>
+                </motion.div>
+              </Link>
+
+              {/* Reports & Analytics */}
+              <Link to="/admin/reports">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.1 }}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="relative group"
+                >
+                  <div className="absolute inset-0 bg-slate-700 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <div className="relative bg-slate-800 p-6 rounded-xl text-center shadow-2xl border border-slate-600">
+                    <motion.div
+                      animate={{ y: [0, -5, 0] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                      className="mb-3"
+                    >
+                      <FiBarChart2 className="text-4xl mx-auto text-slate-300" />
+                    </motion.div>
+                    <p className="text-slate-200 font-bold text-sm">Reports</p>
                   </div>
                 </motion.div>
               </Link>

@@ -548,6 +548,29 @@ const engineeringServices = [
     complexity: 'Expert',
     projectType: ['Design', 'Installation', 'Consulting', 'All Types'],
     industry: ['Construction', 'Infrastructure', 'Commercial', 'Residential']
+  },
+  {
+    title: 'Lever Handle Stairs Stainless Steel Staircase Railing',
+    brand: 'Velan Engineering - Fabrication Division',
+    price: 799,
+    category: 'Mechanical',
+    size: 'Per Sq.Ft',
+    description: 'Premium quality stainless steel staircase railing system with lever handle design. Made from SS304/SS316 grade stainless steel with mirror or satin finish. Includes handrails, balustrades, and lever handles. Perfect for residential, commercial, and industrial applications in Tamil Nadu. Customizable design with expert installation.',
+    rating: 4.7,
+    images: ['/images/lever-handle-railing.jpg', 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800'],
+    stock: 25,
+    featured: true,
+    discount: 12,
+    tags: ['staircase railing', 'stainless steel', 'lever handle', 'SS railing', 'balustrade'],
+    serviceDetails: {
+      scope: ['Site measurement', 'Custom design', 'SS fabrication', 'Surface finishing', 'Installation', 'Quality inspection'],
+      deliverables: ['Design drawings', 'Material specifications', 'Installation guide', 'Warranty certificate'],
+      requirements: ['Staircase dimensions', 'Height requirements', 'Finish preference', 'Load specifications']
+    },
+    duration: '2-3 Weeks',
+    complexity: 'Intermediate',
+    projectType: ['Design', 'Installation'],
+    industry: ['Residential', 'Commercial', 'Infrastructure']
   }
 ];
 

@@ -2372,152 +2372,75 @@ const CustomDesign = () => {
       </div>
       </motion.div>
 
-      {/* AI Chatbot - Floating Window in Slide Area */}
+      {/* AI Chatbot - Redesigned Modern Minimal */}
       <AnimatePresence>
         {chatOpen && (
-          <>
-            {/* Floating Chat Window - Positioned in cleared space */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, x: 100 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              exit={{ opacity: 0, scale: 0.9, x: 100 }}
-              transition={{ 
-                type: 'spring', 
-                damping: 30, 
-                stiffness: 150,
-                mass: 0.8,
-                restDelta: 0.001
-              }}
-              className="fixed top-8 right-8 w-[470px] max-w-[95vw] h-[calc(100vh-4rem)] z-50"
-            >
-              {/* Glassmorphism Effect with rounded corners */}
-              <div className="h-full flex flex-col overflow-hidden rounded-3xl backdrop-blur-2xl bg-gradient-to-br from-luxury-darkGray/95 via-luxury-black/95 to-luxury-darkGray/95 border-2 border-primary-500/30 shadow-2xl shadow-primary-500/20">
-                {/* Chat Header - Enhanced Design */}
-                <div className="relative overflow-hidden flex-shrink-0">
-                  {/* Animated Background */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary-600 via-primary-500 to-primary-600 animate-gradient-x"></div>
-                  <motion.div 
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-                    animate={{ x: ['-100%', '100%'] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-                  />
-                  
-                  <div className="relative p-6 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      {/* AI Avatar with Glow */}
-                      <motion.div 
-                        className="relative"
-                        whileHover={{ scale: 1.05 }}
-                      >
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-white to-primary-100 flex items-center justify-center shadow-lg">
-                          <FiCpu className="text-primary-600 text-2xl" />
-                        </div>
-                        <motion.div
-                          animate={{ scale: [1, 1.3, 1], opacity: [0.7, 0, 0.7] }}
-                          transition={{ duration: 2, repeat: Infinity }}
-                          className="absolute inset-0 rounded-full bg-green-400 blur-md"
-                        />
-                        <motion.div
-                          animate={{ scale: [1, 1.1, 1] }}
-                          transition={{ duration: 2, repeat: Infinity }}
-                          className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white shadow-lg"
-                        />
-                      </motion.div>
-                      
-                      <div>
-                        <h4 className="text-white font-bold text-xl tracking-tight">Design Assistant</h4>
-                        <div className="flex items-center gap-2 mt-1">
-                          <motion.div
-                            animate={{ opacity: [1, 0.5, 1] }}
-                            transition={{ duration: 2, repeat: Infinity }}
-                            className="w-2 h-2 bg-green-400 rounded-full"
-                          />
-                          <p className="text-white/90 text-xs font-medium">AI Online • Ready to assist</p>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <motion.button
-                      whileHover={{ scale: 1.1, rotate: 90 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={() => setChatOpen(false)}
-                      className="text-white/90 hover:text-white transition-colors p-2.5 hover:bg-white/10 rounded-xl backdrop-blur-sm"
-                    >
-                      <FiMinimize2 size={20} />
-                    </motion.button>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="fixed bottom-6 right-6 w-[420px] h-[600px] z-50 flex flex-col shadow-2xl"
+          >
+            {/* Chat Container */}
+            <div className="h-full flex flex-col bg-white rounded-2xl overflow-hidden border border-gray-200">
+              {/* Minimalist Header */}
+              <div className="bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                    <FiCpu className="text-primary-500 text-xl" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-semibold text-base">AI Assistant</h4>
+                    <p className="text-white/80 text-xs">Online</p>
                   </div>
                 </div>
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setChatOpen(false)}
+                  className="text-white/80 hover:text-white"
+                >
+                  <FiMinimize2 size={18} />
+                </motion.button>
+              </div>
 
-                {/* Chat Messages - Redesigned */}
-                <div id="chat-messages" className="flex-1 overflow-y-auto p-5 space-y-4 scroll-smooth custom-scrollbar">
+              {/* Messages Area */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50">
                 {chatMessages.map((msg, index) => (
                   <motion.div
                     key={index}
-                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ delay: index * 0.05 }}
-                    className={`flex gap-3 ${msg.type === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.03 }}
+                    className={`flex gap-2 ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
-                    {/* Avatar */}
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      className="flex-shrink-0"
-                    >
-                      {msg.type === 'bot' ? (
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center shadow-lg ring-2 ring-primary-400/30">
-                          <FiCpu className="text-white text-lg" />
-                        </div>
-                      ) : (
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg ring-2 ring-blue-400/30 text-white font-bold text-sm">
-                          {user?.name?.charAt(0).toUpperCase() || 'U'}
-                        </div>
-                      )}
-                    </motion.div>
+                    {msg.type === 'bot' && (
+                      <div className="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <FiCpu className="text-white text-sm" />
+                      </div>
+                    )}
                     
-                    {/* Message Bubble */}
-                    <motion.div
-                      whileHover={{ scale: 1.02 }}
-                      className={`flex flex-col max-w-[75%] ${
-                        msg.type === 'user' ? 'items-end' : 'items-start'
-                      }`}
-                    >
+                    <div className={`max-w-[75%] ${msg.type === 'user' ? 'order-first' : ''}`}>
                       <div
-                        className={`relative p-4 rounded-2xl shadow-xl ${
+                        className={`px-4 py-2.5 rounded-2xl ${
                           msg.type === 'user'
-                            ? 'bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 text-white rounded-br-sm'
-                            : 'bg-gradient-to-br from-luxury-gray to-luxury-darkGray text-gray-100 rounded-bl-sm border border-primary-500/20'
+                            ? 'bg-primary-500 text-white rounded-br-md'
+                            : 'bg-white text-gray-800 rounded-bl-md shadow-sm border border-gray-100'
                         }`}
                       >
-                        {/* Shine Effect */}
-                        <motion.div
-                          className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/5 to-transparent"
-                          animate={{ x: ['-100%', '100%'] }}
-                          transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-                        />
+                        <p className="text-sm leading-relaxed whitespace-pre-line">{msg.text}</p>
                         
-                        {msg.type === 'bot' && (
-                          <div className="flex items-center gap-2 mb-2 pb-2 border-b border-primary-500/20">
-                            <span className="text-xs text-primary-400 font-bold uppercase tracking-wider">AI Response</span>
-                          </div>
-                        )}
-                        <p className="text-sm leading-relaxed whitespace-pre-line relative z-10">{msg.text}</p>
-                        
-                        {/* Image Suggestions Display */}
+                        {/* Image Options */}
                         {msg.images && msg.images.length > 0 && (
-                          <div className="mt-4 space-y-3 relative z-10">
-                            <div className="flex items-center gap-2 mb-2">
-                              <FiLayers className="text-primary-400 text-sm" />
-                              <span className="text-xs text-primary-400 font-bold uppercase">Suggested Options</span>
-                            </div>
-                            <div className="grid grid-cols-2 gap-3">
+                          <div className="mt-3 space-y-2">
+                            <p className="text-xs font-medium text-gray-500 uppercase">Options</p>
+                            <div className="grid grid-cols-2 gap-2">
                               {msg.images.map((img, imgIndex) => (
                                 <motion.div
                                   key={imgIndex}
-                                  initial={{ opacity: 0, scale: 0.9 }}
-                                  animate={{ opacity: 1, scale: 1 }}
-                                  transition={{ delay: imgIndex * 0.1 }}
-                                  whileHover={{ scale: 1.05, y: -5 }}
-                                  className="relative group cursor-pointer"
+                                  whileHover={{ scale: 1.03 }}
+                                  className="cursor-pointer"
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     if (img.type) {
@@ -2528,270 +2451,142 @@ const CustomDesign = () => {
                                           material: img.type
                                         }
                                       }));
-                                      toast.success(`✅ Material selected: ${img.name}`);
-                                      
-                                      // Add a chat message confirming selection
+                                      toast.success(`Selected: ${img.name}`);
                                       setChatMessages(prev => [...prev, {
                                         type: 'bot',
-                                        text: `Perfect! I've set your material to **${img.type}**${img.price ? ` (${img.price})` : ''}.\n\nYour form has been updated. What else would you like to configure?`,
+                                        text: `Perfect! Material set to ${img.type}.`,
                                         timestamp: new Date()
                                       }]);
-                                    } else {
-                                      toast.error('Unable to select this option. Please try another.');
                                     }
                                   }}
                                 >
-                                  <div className="relative rounded-xl overflow-hidden shadow-lg border-2 border-primary-500/30 group-hover:border-primary-500 transition-all">
+                                  <div className="relative rounded-lg overflow-hidden border border-gray-200">
                                     <img
                                       src={img.url}
                                       alt={img.name}
-                                      className="w-full h-24 object-cover"
+                                      className="w-full h-20 object-cover"
                                       onError={(e) => {
-                                        e.target.src = 'https://via.placeholder.com/200x150?text=Image+Preview';
+                                        e.target.src = 'https://via.placeholder.com/200x150?text=Preview';
                                       }}
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                                      <div className="absolute bottom-0 left-0 right-0 p-2">
-                                        <div className="flex items-center gap-1 text-white">
-                                          <FiCheckCircle size={12} />
-                                          <span className="text-xs font-medium">Click to Select</span>
-                                        </div>
-                                      </div>
-                                    </div>
                                   </div>
-                                  <div className="mt-2 text-center">
-                                    <p className="text-xs font-semibold text-white line-clamp-1">{img.name}</p>
-                                    {img.type && (
-                                      <p className="text-xs text-gray-400">{img.type}</p>
-                                    )}
-                                    {img.price && (
-                                      <p className="text-xs text-primary-400 font-bold">{img.price}</p>
-                                    )}
-                                    {img.properties && (
-                                      <p className="text-xs text-gray-500 line-clamp-1">{img.properties}</p>
-                                    )}
-                                  </div>
+                                  <p className="text-xs mt-1 text-gray-700 font-medium line-clamp-1">{img.name}</p>
+                                  {img.price && (
+                                    <p className="text-xs text-primary-600 font-semibold">{img.price}</p>
+                                  )}
                                 </motion.div>
                               ))}
                             </div>
                           </div>
                         )}
                       </div>
-                      
-                      {msg.timestamp && (
-                        <span className="text-xs text-gray-500 mt-1.5 px-2 flex items-center gap-1">
-                          <FiClock size={10} />
-                          {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </span>
-                      )}
-                    </motion.div>
+                    </div>
+                    
+                    {msg.type === 'user' && (
+                      <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                        {user?.name?.charAt(0).toUpperCase() || 'U'}
+                      </div>
+                    )}
                   </motion.div>
                 ))}
                 
-                {/* Typing Indicator - Enhanced */}
+                {/* Typing Indicator */}
                 {isTyping && (
                   <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex gap-3"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="flex gap-2"
                   >
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center shadow-lg ring-2 ring-primary-400/30">
-                      <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}>
-                        <FiCpu className="text-white text-lg" />
-                      </motion.div>
+                    <div className="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center">
+                      <FiCpu className="text-white text-sm" />
                     </div>
-                    
-                    <div className="bg-gradient-to-br from-luxury-gray to-luxury-darkGray px-5 py-4 rounded-2xl rounded-bl-sm border border-primary-500/20 shadow-xl">
-                      <div className="flex items-center gap-3">
-                        <div className="flex gap-1.5">
+                    <div className="bg-white px-4 py-2.5 rounded-2xl rounded-bl-md shadow-sm border border-gray-100">
+                      <div className="flex gap-1">
+                        {[0, 1, 2].map((i) => (
                           <motion.div
-                            animate={{ y: [0, -8, 0] }}
-                            transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
-                            className="w-2.5 h-2.5 bg-primary-400 rounded-full shadow-lg shadow-primary-400/50"
+                            key={i}
+                            animate={{ y: [0, -5, 0] }}
+                            transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.15 }}
+                            className="w-2 h-2 bg-gray-400 rounded-full"
                           />
-                          <motion.div
-                            animate={{ y: [0, -8, 0] }}
-                            transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
-                            className="w-2.5 h-2.5 bg-primary-400 rounded-full shadow-lg shadow-primary-400/50"
-                          />
-                          <motion.div
-                            animate={{ y: [0, -8, 0] }}
-                            transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
-                            className="w-2.5 h-2.5 bg-primary-400 rounded-full shadow-lg shadow-primary-400/50"
-                          />
-                        </div>
-                        <span className="text-xs text-gray-400 font-medium">AI is analyzing...</span>
+                        ))}
                       </div>
                     </div>
                   </motion.div>
                 )}
               </div>
 
-                {/* Chat Input - Enhanced */}
-                <div className="p-5 bg-gradient-to-t from-luxury-black to-luxury-darkGray border-t border-primary-500/20 flex-shrink-0 backdrop-blur-xl">
-                  {/* Chat Controls */}
-                  <div className="flex gap-3 mb-4">
-                    <motion.button
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={exportChatHistory}
-                      className="flex items-center gap-2 text-xs text-primary-400 hover:text-primary-300 bg-primary-500/10 hover:bg-primary-500/20 px-3 py-2 rounded-lg transition-all"
-                      title="Export chat history"
+              {/* Input Area */}
+              <div className="p-4 bg-white border-t border-gray-200">
+                {/* Quick Actions */}
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  {[
+                    { text: 'Doors', icon: '🚪' },
+                    { text: 'Windows', icon: '🪟' },
+                    { text: 'Gates', icon: '🚧' },
+                    { text: 'Cost', icon: '💰' }
+                  ].map((quick) => (
+                    <button
+                      key={quick.text}
+                      onClick={() => {
+                        setUserMessage(`Show ${quick.text.toLowerCase()} options`);
+                        setTimeout(() => handleSendMessage(), 100);
+                      }}
+                      className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded-full transition-colors"
                     >
-                      <FiSave size={14} />
-                      <span className="font-medium">Export</span>
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={clearChat}
-                      className="flex items-center gap-2 text-xs text-gray-500 hover:text-gray-400 bg-gray-500/10 hover:bg-gray-500/20 px-3 py-2 rounded-lg transition-all"
-                      title="Clear chat"
-                    >
-                      <FiTrash2 size={14} />
-                      <span className="font-medium">Clear</span>
-                    </motion.button>
-                  </div>
-                  
-                  <div className="flex gap-3">
-                    <div className="flex-1 relative">
-                      <input
-                        type="text"
-                        value={userMessage}
-                        onChange={(e) => setUserMessage(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' && !e.shiftKey) {
-                            e.preventDefault();
-                            handleSendMessage();
-                          }
-                        }}
-                        placeholder="Type your message or ask me anything..."
-                        className="w-full bg-luxury-darkGray/80 text-white px-5 py-4 rounded-2xl border-2 border-primary-500/30 focus:border-primary-500 focus:outline-none transition-all placeholder:text-gray-500 shadow-inner"
-                      />
-                    </div>
-                    <motion.button
-                      whileHover={{ scale: 1.08, rotate: 5 }}
-                      whileTap={{ scale: 0.92 }}
-                      onClick={handleSendMessage}
-                      disabled={!userMessage.trim()}
-                      className="bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 text-white px-6 py-4 rounded-2xl hover:shadow-2xl hover:shadow-primary-500/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-                    >
-                      <FiSend size={22} />
-                    </motion.button>
-                  </div>
-                  {/* Quick Actions - Enhanced */}
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {[
-                      { text: 'Show door designs', icon: '🚪', color: 'from-blue-500/20 to-blue-600/20 hover:from-blue-500/30 hover:to-blue-600/30 border-blue-500/30' },
-                      { text: 'Show window options', icon: '🪟', color: 'from-cyan-500/20 to-cyan-600/20 hover:from-cyan-500/30 hover:to-cyan-600/30 border-cyan-500/30' },
-                      { text: 'Gate designs', icon: '🚧', color: 'from-purple-500/20 to-purple-600/20 hover:from-purple-500/30 hover:to-purple-600/30 border-purple-500/30' },
-                      { text: 'Compare materials', icon: '📊', color: 'from-orange-500/20 to-orange-600/20 hover:from-orange-500/30 hover:to-orange-600/30 border-orange-500/30' },
-                      { text: 'Calculate cost', icon: '💰', color: 'from-green-500/20 to-green-600/20 hover:from-green-500/30 hover:to-green-600/30 border-green-500/30' }
-                    ].map((quick) => (
-                      <motion.button
-                        key={quick.text}
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => {
-                          setUserMessage(quick.text);
-                          // Send message immediately after setting it
-                          setTimeout(() => {
-                            const userMsg = {
-                              type: 'user',
-                              text: quick.text,
-                              timestamp: new Date()
-                            };
-                            setChatMessages(prev => [...prev, userMsg]);
-                            setIsTyping(true);
-                            
-                            // Get AI response
-                            setTimeout(() => {
-                              const fallbackResponse = generateChatResponse(quick.text);
-                              let botMsg = {
-                                type: 'bot',
-                                text: typeof fallbackResponse === 'object' ? fallbackResponse.text : fallbackResponse,
-                                images: typeof fallbackResponse === 'object' ? (fallbackResponse.images || []) : [],
-                                timestamp: new Date()
-                              };
-                              setChatMessages(prev => [...prev, botMsg]);
-                              setIsTyping(false);
-                              setUserMessage('');
-                            }, 800);
-                          }, 50);
-                        }}
-                        className={`text-xs bg-gradient-to-r ${quick.color} text-white font-medium px-4 py-2 rounded-xl border transition-all flex items-center gap-2 shadow-lg`}
-                      >
-                        <span className="text-base">{quick.icon}</span>
-                        <span>{quick.text}</span>
-                      </motion.button>
-                    ))}
-                  </div>
+                      {quick.icon} {quick.text}
+                    </button>
+                  ))}
+                </div>
+                
+                {/* Input Box */}
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={userMessage}
+                    onChange={(e) => setUserMessage(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSendMessage();
+                      }
+                    }}
+                    placeholder="Ask me anything..."
+                    className="flex-1 px-4 py-2.5 bg-gray-100 text-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                  />
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={handleSendMessage}
+                    disabled={!userMessage.trim()}
+                    className="bg-primary-500 text-white p-2.5 rounded-full hover:bg-primary-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    <FiSend size={18} />
+                  </motion.button>
+                </div>
               </div>
-              </div>
-            </motion.div>
-          </>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Enhanced Floating Chat Button */}
+      {/* Floating Chat Button - Redesigned */}
       {!chatOpen && (
-        <motion.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0, opacity: 0 }}
-          transition={{ type: 'spring', damping: 15, stiffness: 300 }}
-          className="fixed bottom-8 right-8 z-30"
+        <motion.button
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => setChatOpen(true)}
+          className="fixed bottom-6 right-6 z-30 bg-primary-500 text-white p-4 rounded-full shadow-2xl hover:bg-primary-600 transition-colors"
         >
-          {/* Glow Effect */}
-          <motion.div
-            animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="absolute inset-0 bg-primary-500 rounded-full blur-xl"
-          />
-          
-          <motion.button
-            whileHover={{ scale: 1.15, rotate: 5 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setChatOpen(true)}
-            className="relative bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 text-white p-5 rounded-full shadow-2xl hover:shadow-primary-500/70 transition-all group"
-          >
-            {/* Shine Effect */}
-            <motion.div
-              className="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white/20 to-transparent"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-            />
-            
-            <div className="relative">
-              <motion.div
-                animate={{ rotate: [0, 10, -10, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <FiMessageCircle size={32} className="drop-shadow-lg" />
-              </motion.div>
-              
-              {chatMessages.length > 1 && (
-                <motion.div
-                  animate={{ scale: [1, 1.15, 1] }}
-                  transition={{ duration: 1, repeat: Infinity }}
-                  className="absolute -top-2 -right-2 bg-gradient-to-br from-red-500 to-red-600 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center font-bold shadow-lg ring-2 ring-white"
-                >
-                  {chatMessages.filter(m => m.type === 'bot').length}
-                </motion.div>
-              )}
-            </div>
-          </motion.button>
-          
-          {/* Tooltip */}
-          <motion.div
-            initial={{ opacity: 0, x: 10 }}
-            whileHover={{ opacity: 1, x: 0 }}
-            className="absolute right-full mr-4 top-1/2 -translate-y-1/2 bg-luxury-darkGray text-white px-4 py-2 rounded-lg shadow-xl whitespace-nowrap pointer-events-none"
-          >
-            <span className="text-sm font-medium">Chat with AI Assistant</span>
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-full w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-l-8 border-l-luxury-darkGray"></div>
-          </motion.div>
-        </motion.div>
+          <FiMessageCircle size={28} />
+          {chatMessages.length > 1 && (
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+              {chatMessages.filter(m => m.type === 'bot').length}
+            </span>
+          )}
+        </motion.button>
       )}
     </div>
   );

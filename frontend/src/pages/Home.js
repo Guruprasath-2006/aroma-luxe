@@ -94,9 +94,9 @@ const Home = () => {
   };
 
   return (
-    <div className="bg-luxury-black">
+    <div className="bg-luxury-black w-full overflow-x-hidden">
       {/* Hero Section - Unique Engineering Design */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-luxury-black via-luxury-darkGray to-luxury-black">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-luxury-black via-luxury-darkGray to-luxury-black px-4 sm:px-6">
         {/* Animated Grid Background */}
         <div className="absolute inset-0 opacity-20">
           <div className="absolute inset-0" style={{
@@ -116,7 +116,7 @@ const Home = () => {
             repeat: Infinity,
             ease: "linear"
           }}
-          className="absolute top-20 left-10 w-32 h-32 border-4 border-primary-500/30"
+          className="absolute top-10 sm:top-20 left-5 sm:left-10 w-16 sm:w-32 h-16 sm:h-32 border-2 sm:border-4 border-primary-500/30"
         ></motion.div>
 
         <motion.div
@@ -129,7 +129,7 @@ const Home = () => {
             repeat: Infinity,
             ease: "linear"
           }}
-          className="absolute bottom-20 right-10 w-40 h-40 rounded-full border-4 border-primary-500/20"
+          className="absolute bottom-10 sm:bottom-20 right-5 sm:right-10 w-20 sm:w-40 h-20 sm:h-40 rounded-full border-2 sm:border-4 border-primary-500/20"
         ></motion.div>
 
         <motion.div
@@ -142,40 +142,41 @@ const Home = () => {
             repeat: Infinity,
             ease: "easeInOut"
           }}
-          className="absolute top-1/3 right-1/4 w-24 h-24 bg-primary-500/10 backdrop-blur-sm"
+          className="absolute top-1/3 right-1/4 w-12 sm:w-24 h-12 sm:h-24 bg-primary-500/10 backdrop-blur-sm hidden sm:block"
           style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }}
         ></motion.div>
 
         {/* Orange Glow Effects */}
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-500/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary-600/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 left-1/4 w-48 sm:w-96 h-48 sm:h-96 bg-primary-500/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-48 sm:w-96 h-48 sm:h-96 bg-primary-600/20 rounded-full blur-3xl"></div>
 
         {/* Main Content */}
-        <div className="relative z-10 text-center px-4 max-w-7xl mx-auto py-20">
+        <div className="relative z-10 text-center px-4 sm:px-6 max-w-7xl mx-auto py-12 sm:py-16 md:py-20 w-full">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
+            className="w-full"
           >
             {/* Company Badge */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
-              className="inline-block mb-6"
+              className="inline-block mb-4 sm:mb-6"
             >
-              <div className="px-6 py-2 bg-primary-500/10 border border-primary-500/30 rounded-full backdrop-blur-sm">
-                <span className="text-primary-500 font-semibold text-sm tracking-wider">VELAN ENGINEERING</span>
+              <div className="px-4 sm:px-6 py-1.5 sm:py-2 bg-primary-500/10 border border-primary-500/30 rounded-full backdrop-blur-sm">
+                <span className="text-primary-500 font-semibold text-xs sm:text-sm tracking-wider">VELAN ENGINEERING</span>
               </div>
             </motion.div>
 
             {/* Main Heading with Unique Typography */}
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold mb-4 sm:mb-6 leading-tight">
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3, duration: 0.8 }}
-                className="mb-2"
+                className="mb-1 sm:mb-2"
               >
                 <span className="text-white bg-clip-text">Engineering</span>
               </motion.div>
@@ -191,7 +192,7 @@ const Home = () => {
                 <motion.div
                   animate={{ width: ['0%', '100%'] }}
                   transition={{ delay: 1, duration: 1 }}
-                  className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-primary-400 to-primary-600"
+                  className="absolute bottom-0 left-0 h-0.5 sm:h-1 bg-gradient-to-r from-primary-400 to-primary-600"
                 ></motion.div>
               </motion.div>
             </h1>
@@ -201,7 +202,7 @@ const Home = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
-              className="flex flex-wrap justify-center gap-4 mb-8 max-w-4xl mx-auto"
+              className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8 max-w-4xl mx-auto px-2"
             >
               {[
                 { icon: '❄️', text: 'HVAC Systems' },
@@ -217,16 +218,16 @@ const Home = () => {
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.8 + index * 0.1 }}
-                  className="px-4 py-2 bg-luxury-darkGray/50 backdrop-blur-sm border border-primary-500/20 rounded-lg hover:border-primary-500/50 transition-all"
+                  className="px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 bg-luxury-darkGray/50 backdrop-blur-sm border border-primary-500/20 rounded-lg hover:border-primary-500/50 transition-all"
                 >
-                  <span className="text-primary-500 mr-2">{service.icon}</span>
-                  <span className="text-gray-300 text-sm">{service.text}</span>
+                  <span className="text-primary-500 mr-1 sm:mr-2 text-sm sm:text-base">{service.icon}</span>
+                  <span className="text-gray-300 text-xs sm:text-sm">{service.text}</span>
                 </motion.div>
               ))}
             </motion.div>
 
             {/* Description */}
-            <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-400 mb-8 sm:mb-10 md:mb-12 max-w-3xl mx-auto leading-relaxed px-2">
               Professional engineering solutions with <span className="text-primary-500 font-semibold"><AnimatedCounter end={49} duration={5} /> years</span> of expertise in mechanical and industrial systems
             </p>
 
@@ -235,13 +236,13 @@ const Home = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.4 }}
-              className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+              className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center px-2"
             >
-              <Link to="/shop">
+              <Link to="/shop" className="w-full sm:w-auto">
                 <motion.button
                   whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(255, 111, 0, 0.4)' }}
                   whileTap={{ scale: 0.95 }}
-                  className="group px-10 py-5 bg-gradient-to-r from-primary-500 to-primary-600 text-black font-bold rounded-xl text-lg flex items-center space-x-3 shadow-primary-lg relative overflow-hidden"
+                  className="group w-full sm:w-auto px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 bg-gradient-to-r from-primary-500 to-primary-600 text-black font-bold rounded-xl text-base sm:text-lg flex items-center justify-center space-x-2 sm:space-x-3 shadow-primary-lg relative overflow-hidden"
                 >
                   <span className="relative z-10">Explore Services</span>
                   <motion.div
@@ -249,13 +250,13 @@ const Home = () => {
                     transition={{ duration: 1.5, repeat: Infinity }}
                     className="relative z-10"
                   >
-                    <FiArrowRight className="text-xl" />
+                    <FiArrowRight className="text-lg sm:text-xl" />
                   </motion.div>
                   <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-700 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </motion.button>
               </Link>
               
-              <Link to="/shop?category=Consulting">
+              <Link to="/shop?category=Consulting" className="w-full sm:w-auto">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}

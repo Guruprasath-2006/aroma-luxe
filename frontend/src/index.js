@@ -5,10 +5,9 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
-import axios from 'axios';
 
-// Configure axios default base URL for production
-axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+// Note: Using proxy configuration from package.json for API requests
+// The proxy setting handles routing /api/* requests to backend
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

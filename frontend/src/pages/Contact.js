@@ -33,9 +33,48 @@ const Contact = () => {
     setLoading(true);
 
     try {
-      // Validation
+      // Required fields check
       if (!formData.name || !formData.email || !formData.subject || !formData.message) {
         toast.error('Please fill in all required fields');
+        setLoading(false);
+        return;
+      }
+
+      // Name validation
+      if (formData.name.trim().length < 2) {
+        toast.error('Name must be at least 2 characters');
+        setLoading(false);
+        return;
+      }
+
+      // Email format validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        toast.error('Please enter a valid email address');
+        setLoading(false);
+        return;
+      }
+
+      // Phone validation (optional — if provided must be valid 10-digit Indian number)
+      if (formData.phone) {
+        const phoneRegex = /^[6-9][0-9]{9}$/;
+        if (!phoneRegex.test(formData.phone.replace(/[\s\-()]/g, ''))) {
+          toast.error('Please enter a valid 10-digit phone number starting with 6-9');
+          setLoading(false);
+          return;
+        }
+      }
+
+      // Subject validation
+      if (formData.subject.trim().length < 3) {
+        toast.error('Subject must be at least 3 characters');
+        setLoading(false);
+        return;
+      }
+
+      // Message length validation
+      if (formData.message.trim().length < 10) {
+        toast.error('Message must be at least 10 characters');
         setLoading(false);
         return;
       }
@@ -176,6 +215,10 @@ const Contact = () => {
                         required
                         value={formData.name}
                         onChange={handleChange}
+                        minLength="2"
+                        maxLength="50"
+                        pattern="[A-Za-z\s.'-]{2,50}"
+                        title="Name should contain only letters and be 2-50 characters long"
                         className="w-full pl-12 pr-4 py-3 bg-luxury-black text-white border border-primary-600/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
                         placeholder="John Doe"
                       />
@@ -213,8 +256,12 @@ const Contact = () => {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
+                        pattern="[0-9]{10}"
+                        maxLength="10"
+                        minLength="10"
+                        title="Please enter exactly 10 digits"
                         className="w-full pl-12 pr-4 py-3 bg-luxury-black text-white border border-primary-600/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
-                        placeholder="+91 9443839900"
+                        placeholder="9876543210"
                       />
                     </div>
                   </div>

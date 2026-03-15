@@ -269,6 +269,8 @@ const AddProduct = () => {
                   type="number"
                   name="price"
                   required
+                  min="0"
+                  max="999999"
                   step="0.01"
                   value={formData.price}
                   onChange={handleChange}

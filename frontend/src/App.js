@@ -18,6 +18,7 @@ import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Contact from './pages/Contact';
+import FAQ from './pages/FAQ';
 import AdminDashboard from './pages/Admin/Dashboard';
 import AdminProducts from './pages/Admin/Products';
 import AdminAddProduct from './pages/Admin/AddProduct';
@@ -26,6 +27,7 @@ import AdminOrders from './pages/Admin/Orders';
 import AdminUsers from './pages/Admin/Users';
 import AdminDesigns from './pages/Admin/Designs';
 import AdminContactMessages from './pages/Admin/ContactMessages';
+import AdminReports from './pages/Admin/Reports';
 import CustomDesign from './pages/CustomDesign';
 import MyDesigns from './pages/MyDesigns';
 import PrivateRoute from './components/PrivateRoute';
@@ -33,9 +35,9 @@ import AdminRoute from './components/AdminRoute';
 
 function App() {
   return (
-    <div className="App">
+    <div className="App w-full max-w-screen overflow-x-hidden">
       <Navbar />
-      <main className="min-h-screen">
+      <main className="min-h-screen w-full overflow-x-hidden">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
@@ -44,6 +46,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/faq" element={<FAQ />} />
           <Route path="/design-studio" element={<CustomDesign />} />
           
           {/* Protected Routes */}
@@ -61,6 +64,7 @@ function App() {
           <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
           <Route path="/admin/designs" element={<AdminRoute><AdminDesigns /></AdminRoute>} />
           <Route path="/admin/contact-messages" element={<AdminRoute><AdminContactMessages /></AdminRoute>} />
+          <Route path="/admin/reports" element={<AdminRoute><AdminReports /></AdminRoute>} />
         </Routes>
       </main>
       <Footer />

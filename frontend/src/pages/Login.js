@@ -19,6 +19,24 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Frontend validation
+    if (!formData.email || !formData.password) {
+      toast.error('Please enter your email and password');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      toast.error('Password must be at least 6 characters');
+      return;
+    }
+
     setLoading(true);
 
     const result = await login(formData.email, formData.password);
@@ -576,6 +594,9 @@ const Login = () => {
                 required
                 value={formData.password}
                 onChange={handleChange}
+                minLength="6"
+                maxLength="128"
+                title="Password must be at least 6 characters long"
                 className="appearance-none relative block w-full px-4 py-3 border border-primary-600/30 bg-luxury-black text-white placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                 placeholder="Enter secure password"
               />

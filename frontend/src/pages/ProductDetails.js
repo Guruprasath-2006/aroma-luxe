@@ -184,7 +184,7 @@ const ProductDetails = () => {
                 className="w-full py-4 gold-glow-btn text-black font-bold rounded-lg text-lg flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <FiZap />
-                <span>Buy Now</span>
+                <span>Consulting</span>
               </motion.button>
               
               <motion.button

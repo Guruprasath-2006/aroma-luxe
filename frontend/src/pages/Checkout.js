@@ -69,11 +69,11 @@ const Checkout = () => {
   const validatePhone = (phone) => {
     // Remove spaces, dashes, and parentheses for validation
     const cleanPhone = phone.replace(/[\s\-()]/g, '');
-    const phoneRegex = /^[+]?[\d]{10,15}$/;
+    const phoneRegex = /^[0-9]{10}$/;
     
     if (!phone.trim()) return 'Phone number is required';
-    if (!phoneRegex.test(cleanPhone)) return 'Please enter a valid phone number (10-15 digits)';
-    if (cleanPhone.length < 10) return 'Phone number must be at least 10 digits';
+    if (!phoneRegex.test(cleanPhone)) return 'Please enter exactly 10 digits';
+    if (cleanPhone.length !== 10) return 'Phone number must be exactly 10 digits';
     return '';
   };
 
@@ -435,6 +435,8 @@ const Checkout = () => {
                       value={formData.fullName}
                       onChange={handleChange}
                       onBlur={handleBlur}
+                      minLength="2"
+                      maxLength="50"
                       pattern="[A-Za-z\s.'-]{2,50}"
                       title="Full name should only contain letters, spaces, and common punctuation"
                       className={`w-full px-4 py-3 bg-luxury-black text-white border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
@@ -529,7 +531,9 @@ const Checkout = () => {
                       value={formData.phone}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      pattern="[+]?[\d\s\-()]{10,15}"
+                      pattern="[0-9]{10}"
+                      maxLength="10"
+                      minLength="10"
                       title="Please enter a valid phone number (10-15 digits)"
                       className={`w-full px-4 py-3 bg-luxury-black text-white border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
                         errors.phone ? 'border-red-500 focus:ring-red-500' : 'border-gold-600/30 focus:ring-gold-500'
